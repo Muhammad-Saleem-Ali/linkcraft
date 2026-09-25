@@ -37,6 +37,7 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
     <header style={{ width: '100%', position: 'sticky', top: 0, zIndex: 100 }}>
       {/* Top Bar */}
       <div
+        className="header-top-bar"
         style={{
           height: '64px',
           backgroundColor: '#0F172A',
@@ -289,6 +290,7 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
       {/* Sub-Navigation Tabs Bar */}
       {setActiveTab && (
         <div
+          className="subnav-tabs"
           style={{
             backgroundColor: '#FFFFFF',
             borderBottom: '1px solid #E2E8F0',

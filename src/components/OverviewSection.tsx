@@ -160,14 +160,14 @@ export default function OverviewSection({ showToast }: OverviewSectionProps) {
 
       {/* 2. Create Link Card */}
       <div className="ilearner-card" style={{ padding: '1.25rem 1.5rem' }}>
-        <form onSubmit={handleCreateLink} style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+        <form onSubmit={handleCreateLink} className="create-link-form responsive-flex-column" style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
           <input
             type="text"
             placeholder="Paste an Amazon or Walmart product URL"
             value={productUrl}
             onChange={(e) => setProductUrl(e.target.value)}
             className="input-field"
-            style={{ borderRadius: '12px', fontSize: '0.9375rem' }}
+            style={{ borderRadius: '12px', fontSize: '0.9375rem', flex: 1 }}
           />
           <button type="submit" className="btn-purple" style={{ whiteSpace: 'nowrap', borderRadius: '12px' }}>
             Create link
@@ -199,6 +199,7 @@ export default function OverviewSection({ showToast }: OverviewSectionProps) {
       {/* 3. CURRENTLY OWED Banner */}
       <div className="ilearner-card" style={{ padding: 0, overflow: 'hidden', border: 'none', boxShadow: 'var(--brand-shadow-md)' }}>
         <div
+          className="owed-banner-header"
           style={{
             background: 'linear-gradient(135deg, #0F172A 0%, #06B6D4 100%)',
             color: '#FFFFFF',
@@ -269,7 +270,7 @@ export default function OverviewSection({ showToast }: OverviewSectionProps) {
 
       {/* 4. Four Big Metrics Card Grid */}
       <div className="ilearner-card" style={{ padding: '1.5rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' }}>
+        <div className="responsive-grid-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' }}>
           <div>
             <div style={{ fontSize: '2rem', fontWeight: 800, color: '#06B6D4' }}>258</div>
             <span style={{ fontSize: '0.8125rem', color: '#64748B', fontWeight: 600 }}>Views</span>

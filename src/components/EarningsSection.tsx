@@ -94,14 +94,14 @@ export default function EarningsSection({ showToast }: EarningsSectionProps) {
 
       {/* 2. Create Link Input Card */}
       <div className="ilearner-card" style={{ padding: '1.25rem 1.5rem' }}>
-        <form onSubmit={handleCreateLink} style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+        <form onSubmit={handleCreateLink} className="create-link-form responsive-flex-column" style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
           <input
             type="text"
             placeholder="Paste an Amazon or Walmart product URL"
             value={productUrl}
             onChange={(e) => setProductUrl(e.target.value)}
             className="input-field"
-            style={{ borderRadius: '12px', fontSize: '0.9375rem' }}
+            style={{ borderRadius: '12px', fontSize: '0.9375rem', flex: 1 }}
           />
           <button type="submit" className="btn-purple" style={{ whiteSpace: 'nowrap', borderRadius: '12px' }}>
             Create link

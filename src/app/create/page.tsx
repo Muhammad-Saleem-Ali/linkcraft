@@ -276,7 +276,7 @@ export default function CreateAffiliateLinkPage() {
         </div>
 
         {/* Studio 2-Column Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '1.75rem', marginBottom: '2rem' }}>
+        <div className="responsive-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '1.75rem', marginBottom: '2rem' }}>
           
           {/* Left Column: Link Converter Studio */}
           <div className="ilearner-card" style={{ position: 'relative', overflow: 'hidden', padding: 0 }}>

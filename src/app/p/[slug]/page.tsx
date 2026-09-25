@@ -138,11 +138,11 @@ export default function ProductShowcasePage({ params }: ShowcasePageProps) {
 
       {/* Main Container */}
       <main style={{ maxWidth: '1000px', margin: '2rem auto', padding: '0 1rem' }}>
-        <div style={{ backgroundColor: '#FFFFFF', borderRadius: '24px', boxShadow: '0 10px 30px rgba(15,23,42,0.06)', border: '1px solid #E2E8F0', padding: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '2.5rem' }}>
+        <div className="product-split-grid" style={{ backgroundColor: '#FFFFFF', borderRadius: '24px', boxShadow: '0 10px 30px rgba(15,23,42,0.06)', border: '1px solid #E2E8F0', padding: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '2.5rem' }}>
           
           {/* Left Column: Image & Media */}
           <div>
-            <div style={{ position: 'relative', borderRadius: '16px', overflow: 'hidden', backgroundColor: '#F8FAFC', border: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '380px' }}>
+            <div className="product-image-container" style={{ position: 'relative', borderRadius: '16px', overflow: 'hidden', backgroundColor: '#F8FAFC', border: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '380px' }}>
               <img
                 src={item.imageUrl}
                 alt={item.name}
@@ -151,7 +151,7 @@ export default function ProductShowcasePage({ params }: ShowcasePageProps) {
               <span style={{ position: 'absolute', top: '1rem', left: '1rem', backgroundColor: '#0F172A', color: '#FFFFFF', padding: '0.25rem 0.75rem', borderRadius: '99px', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                 <span>{item.country || '🇺🇸'}</span> Amazon Marketplace
               </span>
-              <span style={{ position: 'absolute', top: '1rem', right: '1rem', backgroundColor: '#7C3AED', color: '#FFFFFF', padding: '0.25rem 0.75rem', borderRadius: '99px', fontSize: '0.75rem', fontWeight: 800 }}>
+              <span style={{ position: 'absolute', top: '1rem', right: '1rem', backgroundColor: '#F59E0B', color: '#FFFFFF', padding: '0.25rem 0.75rem', borderRadius: '99px', fontSize: '0.75rem', fontWeight: 800 }}>
                 SAVE 20%
               </span>
             </div>
@@ -159,7 +159,7 @@ export default function ProductShowcasePage({ params }: ShowcasePageProps) {
             {/* Badges Bar */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginTop: '1rem' }}>
               <div style={{ padding: '0.75rem', backgroundColor: '#F8FAFC', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', fontWeight: 600, color: '#334155' }}>
-                <Truck size={18} color="#4F46E5" />
+                <Truck size={18} color="#06B6D4" />
                 <span>Prime 2-Day Fast Delivery</span>
               </div>
               <div style={{ padding: '0.75rem', backgroundColor: '#F8FAFC', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', fontWeight: 600, color: '#334155' }}>
@@ -187,7 +187,7 @@ export default function ProductShowcasePage({ params }: ShowcasePageProps) {
 
               {/* Price Section */}
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid #F1F5F9' }}>
-                <span style={{ fontSize: '2.25rem', fontWeight: 900, color: '#4F46E5' }}>
+                <span style={{ fontSize: '2.25rem', fontWeight: 900, color: '#06B6D4' }}>
                   {item.price || '$24.99'}
                 </span>
                 {item.originalPrice && (
@@ -226,6 +226,7 @@ export default function ProductShowcasePage({ params }: ShowcasePageProps) {
                 href={directBuyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="btn-teal"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -234,13 +235,9 @@ export default function ProductShowcasePage({ params }: ShowcasePageProps) {
                   width: '100%',
                   padding: '1rem 1.5rem',
                   borderRadius: '14px',
-                  backgroundColor: '#4F46E5',
-                  color: '#FFFFFF',
                   fontWeight: 800,
                   fontSize: '1.0625rem',
                   textDecoration: 'none',
-                  boxShadow: '0 6px 20px rgba(79, 70, 229, 0.35)',
-                  transition: 'transform 0.15s, background-color 0.15s',
                   marginBottom: '0.875rem'
                 }}
               >
