@@ -30,6 +30,59 @@ export default function SettingsSection({ showToast }: SettingsSectionProps) {
   const [iban, setIban] = useState('');
   const [storeSlug, setStoreSlug] = useState('hka');
   const [isPageLive, setIsPageLive] = useState(true);
+  const [isPayoutChecklistOpen, setIsPayoutChecklistOpen] = useState(false);
+  const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+
+  // WhatsApp pairing code state & countdown timer
+  const [showPairingBox, setShowPairingBox] = useState(false);
+  const [pairingCode, setPairingCode] = useState('5FFN56');
+  const [timerSeconds, setTimerSeconds] = useState(113);
+  const [linkedAccounts, setLinkedAccounts] = useState([
+    { id: 'wa-1', name: '❤️ Ahmar Pmm', tag: '8', lid: '161332...@lid', date: 'Linked Jul 31, 2026' }
+  ]);
+
+  // Dynamic Checkmarks calculation based on filled details
+  const isNameFilled = fullName.trim().length > 0;
+  const isPhoneFilled = phone.trim().length > 0;
+  const isBankFilled = selectedBank.length > 0 || accountTitle.trim().length > 0 || iban.trim().length > 0;
+  const isWhatsAppLinked = linkedAccounts.length > 0;
+
+  const completedCount = [
+    isNameFilled,
+    isPhoneFilled,
+    isBankFilled,
+    is2FAEnabled,
+    isWhatsAppLinked,
+  ].filter(Boolean).length;
+
+  const progressPercent = (completedCount / 5) * 100;
+
+  // Countdown timer effect for active pairing code
+  React.useEffect(() => {
+    if (!showPairingBox || timerSeconds <= 0) return;
+    const interval = setInterval(() => {
+      setTimerSeconds((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [showPairingBox, timerSeconds]);
+
+  const handleGeneratePairingCode = () => {
+    const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+    let code = '';
+    for (let i = 0; i < 6; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    setPairingCode(code);
+    setTimerSeconds(120);
+    setShowPairingBox(true);
+    showToast(`Generated pairing code: ${code}!`);
+  };
+
+  const formatTimer = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
 
   const handleSaveInfo = (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,20 +202,25 @@ export default function SettingsSection({ showToast }: SettingsSectionProps) {
         </div>
       </div>
 
-      {/* 3. "Get ready for payouts" Progress Card (Screenshot 1) */}
+      {/* 3. "Get ready for payouts" Collapsible Accordion Card (Screenshot 1) */}
       <div
         style={{
           backgroundColor: '#FFFBEB',
           border: '1px solid #FDE68A',
           borderRadius: '20px',
-          padding: '1.5rem',
+          padding: '1.25rem 1.5rem',
           display: 'flex',
           flexDirection: 'column',
           gap: '1rem',
           boxShadow: 'var(--brand-shadow-sm)',
+          transition: 'all 0.2s ease',
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        {/* Accordion Header Trigger */}
+        <div
+          onClick={() => setIsPayoutChecklistOpen(!isPayoutChecklistOpen)}
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', userSelect: 'none' }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#FEF3C7', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <CheckSquare size={20} />
@@ -177,90 +235,136 @@ export default function SettingsSection({ showToast }: SettingsSectionProps) {
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ fontSize: '0.875rem', fontWeight: 800, color: '#D97706' }}>3 of 5</span>
-            <ChevronDown size={18} color="#D97706" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+            <span style={{ fontSize: '0.875rem', fontWeight: 800, color: '#D97706', backgroundColor: '#FEF3C7', padding: '0.2rem 0.625rem', borderRadius: '99px' }}>
+              {completedCount} of 5
+            </span>
+            <ChevronDown
+              size={20}
+              color="#D97706"
+              style={{ transform: isPayoutChecklistOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.25s ease' }}
+            />
           </div>
         </div>
 
-        {/* Progress bar */}
+        {/* Dynamic Progress Bar */}
         <div style={{ width: '100%', height: '8px', backgroundColor: '#FEF3C7', borderRadius: '99px', overflow: 'hidden' }}>
-          <div style={{ width: '60%', height: '100%', background: 'linear-gradient(90deg, #F59E0B 0%, #D97706 100%)', borderRadius: '99px' }} />
+          <div style={{ width: `${progressPercent}%`, height: '100%', background: 'linear-gradient(90deg, #F59E0B 0%, #D97706 100%)', borderRadius: '99px', transition: 'width 0.4s ease' }} />
         </div>
 
-        {/* Checklist items (Matching Screenshot 1) */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', marginTop: '0.5rem' }}>
-          {/* Item 1 */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: '#D1FAE5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem' }}>
-                ✓
-              </div>
-              <div>
-                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>Add your name</span>
-                <span style={{ fontSize: '0.7813rem', color: '#64748B', display: 'block' }}>Ahmar</span>
-              </div>
-            </div>
-          </div>
+        {/* Accordion Body (Collapsible, hidden by default) */}
+        {isPayoutChecklistOpen && (
+          <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', marginTop: '0.5rem', borderTop: '1px solid #FDE68A', paddingTop: '1rem' }}>
+            <span style={{ fontSize: '0.8125rem', color: '#64748B', fontWeight: 600 }}>
+              Finish these before your first payout is due
+            </span>
 
-          {/* Item 2 */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: '#D1FAE5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem' }}>
-                ✓
-              </div>
-              <div>
-                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>Add your phone number</span>
-                <span style={{ fontSize: '0.7813rem', color: '#64748B', display: 'block' }}>03288539597</span>
+            {/* Item 1: Name */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                {isNameFilled ? (
+                  <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: '#D1FAE5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem' }}>
+                    ✓
+                  </div>
+                ) : (
+                  <div style={{ width: '22px', height: '22px', borderRadius: '50%', border: '2px dashed #F59E0B', backgroundColor: 'transparent' }} />
+                )}
+                <div>
+                  <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>Add your name</span>
+                  <span style={{ fontSize: '0.7813rem', color: '#64748B', display: 'block' }}>{fullName || 'Not provided'}</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Item 3 */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <div style={{ width: '22px', height: '22px', borderRadius: '50%', border: '2px dashed #F59E0B', backgroundColor: 'transparent' }} />
-              <div>
-                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>Set up your bank / wallet</span>
+            {/* Item 2: Phone */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                {isPhoneFilled ? (
+                  <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: '#D1FAE5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem' }}>
+                    ✓
+                  </div>
+                ) : (
+                  <div style={{ width: '22px', height: '22px', borderRadius: '50%', border: '2px dashed #F59E0B', backgroundColor: 'transparent' }} />
+                )}
+                <div>
+                  <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>Add your phone number</span>
+                  <span style={{ fontSize: '0.7813rem', color: '#64748B', display: 'block' }}>{phone || 'Not provided'}</span>
+                </div>
               </div>
             </div>
-            <button
-              onClick={() => showToast('Opening bank setup...')}
-              style={{ background: 'none', border: 'none', color: '#06B6D4', fontWeight: 700, fontSize: '0.8125rem', cursor: 'pointer' }}
-            >
-              Set up ›
-            </button>
-          </div>
 
-          {/* Item 4 */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <div style={{ width: '22px', height: '22px', borderRadius: '50%', border: '2px dashed #F59E0B', backgroundColor: 'transparent' }} />
-              <div>
-                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>Turn on two-factor authentication</span>
-                <span style={{ fontSize: '0.75rem', color: '#94A3B8', display: 'block' }}>Optional but strongly recommended</span>
+            {/* Item 3: Bank / Wallet */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                {isBankFilled ? (
+                  <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: '#D1FAE5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem' }}>
+                    ✓
+                  </div>
+                ) : (
+                  <div style={{ width: '22px', height: '22px', borderRadius: '50%', border: '2px dashed #F59E0B', backgroundColor: 'transparent' }} />
+                )}
+                <div>
+                  <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>Set up your bank / wallet</span>
+                  <span style={{ fontSize: '0.7813rem', color: '#64748B', display: 'block' }}>
+                    {selectedBank ? `${selectedBank.toUpperCase()} Bank` : 'Not configured'}
+                  </span>
+                </div>
               </div>
+              {!isBankFilled && (
+                <button
+                  onClick={() => showToast('Scroll down to fill your payout bank details')}
+                  style={{ background: 'none', border: 'none', color: '#06B6D4', fontWeight: 700, fontSize: '0.8125rem', cursor: 'pointer' }}
+                >
+                  Set up ›
+                </button>
+              )}
             </div>
-            <button
-              onClick={() => showToast('Opening 2FA setup...')}
-              style={{ background: 'none', border: 'none', color: '#06B6D4', fontWeight: 700, fontSize: '0.8125rem', cursor: 'pointer' }}
-            >
-              Set up ›
-            </button>
-          </div>
 
-          {/* Item 5 */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: '#D1FAE5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem' }}>
-                ✓
+            {/* Item 4: 2FA */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                {is2FAEnabled ? (
+                  <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: '#D1FAE5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem' }}>
+                    ✓
+                  </div>
+                ) : (
+                  <div style={{ width: '22px', height: '22px', borderRadius: '50%', border: '2px dashed #F59E0B', backgroundColor: 'transparent' }} />
+                )}
+                <div>
+                  <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>Turn on two-factor authentication</span>
+                  <span style={{ fontSize: '0.75rem', color: '#94A3B8', display: 'block' }}>Optional but strongly recommended</span>
+                </div>
               </div>
-              <div>
-                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>Link your WhatsApp account</span>
+              {!is2FAEnabled && (
+                <button
+                  onClick={() => {
+                    setIs2FAEnabled(true);
+                    showToast('Enabled 2FA authentication!');
+                  }}
+                  style={{ background: 'none', border: 'none', color: '#06B6D4', fontWeight: 700, fontSize: '0.8125rem', cursor: 'pointer' }}
+                >
+                  Set up ›
+                </button>
+              )}
+            </div>
+
+            {/* Item 5: WhatsApp */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                {isWhatsAppLinked ? (
+                  <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: '#D1FAE5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem' }}>
+                    ✓
+                  </div>
+                ) : (
+                  <div style={{ width: '22px', height: '22px', borderRadius: '50%', border: '2px dashed #F59E0B', backgroundColor: 'transparent' }} />
+                )}
+                <div>
+                  <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>Link your WhatsApp account</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* 4. "Personal information" Card (Screenshot 1 & 2) */}
@@ -425,90 +529,134 @@ export default function SettingsSection({ showToast }: SettingsSectionProps) {
           </div>
 
           <span style={{ padding: '0.2rem 0.625rem', borderRadius: '99px', backgroundColor: '#ECFEFF', color: '#0891B2', fontSize: '0.75rem', fontWeight: 700 }}>
-            1 / 5 linked
+            {linkedAccounts.length} / 5 linked
           </span>
         </div>
 
-        {/* Linked Account Box */}
-        <div
-          style={{
-            padding: '1rem 1.25rem',
-            borderRadius: '14px',
-            backgroundColor: '#F8FAFC',
-            border: '1px solid #E2E8F0',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1.25rem',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <MessageCircle size={20} color="#FFFFFF" fill="#FFFFFF" />
-            </div>
-            <div>
-              <div style={{ fontWeight: 800, fontSize: '0.9375rem', color: '#0F172A', display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-                <span>❤️ Ahmar Pmm</span>
-                <span style={{ fontSize: '0.6875rem', backgroundColor: '#E2E8F0', padding: '0.1rem 0.375rem', borderRadius: '4px', color: '#475569' }}>8</span>
-              </div>
-              <span style={{ fontSize: '0.75rem', color: '#64748B' }}>
-                161332...@lid • Linked Jul 31, 2026
-              </span>
-            </div>
-          </div>
-
-          <button
-            onClick={() => showToast('Unlinked WhatsApp account')}
-            style={{ border: 'none', background: 'none', color: '#EF4444', fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer' }}
+        {/* Linked Accounts List */}
+        {linkedAccounts.map((acc) => (
+          <div
+            key={acc.id}
+            style={{
+              padding: '1rem 1.25rem',
+              borderRadius: '14px',
+              backgroundColor: '#F8FAFC',
+              border: '1px solid #E2E8F0',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '1rem',
+            }}
           >
-            Unlink
-          </button>
-        </div>
-
-        {/* Pairing verification code dark box (Screenshot 2) */}
-        <div
-          style={{
-            backgroundColor: '#0F172A',
-            color: '#FFFFFF',
-            borderRadius: '16px',
-            padding: '1.75rem',
-            boxShadow: '0 8px 24px rgba(15, 23, 42, 0.25)',
-          }}
-        >
-          <div style={{ textAlign: 'center', marginBottom: '1.25rem' }}>
-            <div style={{ fontSize: '2.5rem', fontWeight: 900, letterSpacing: '0.35em', fontFamily: 'monospace', color: '#FFFFFF' }}>
-              5 F F N 5 6
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <MessageCircle size={20} color="#FFFFFF" fill="#FFFFFF" />
+              </div>
+              <div>
+                <div style={{ fontWeight: 800, fontSize: '0.9375rem', color: '#0F172A', display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                  <span>{acc.name}</span>
+                  <span style={{ fontSize: '0.6875rem', backgroundColor: '#E2E8F0', padding: '0.1rem 0.375rem', borderRadius: '4px', color: '#475569' }}>{acc.tag}</span>
+                </div>
+                <span style={{ fontSize: '0.75rem', color: '#64748B' }}>
+                  {acc.lid} • {acc.date}
+                </span>
+              </div>
             </div>
-            <span style={{ fontSize: '0.8125rem', color: '#94A3B8', fontWeight: 600 }}>
-              Expires in 01:53
-            </span>
-          </div>
 
-          <ol style={{ paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.625rem', fontSize: '0.875rem', color: '#E2E8F0', lineHeight: 1.5, marginBottom: '1.5rem' }}>
-            <li>Open WhatsApp on your phone and message our bot <strong>+92 3181494914</strong>.</li>
-            <li>Send the code above as your first message.</li>
-            <li>Once linked, share any Amazon URL and we'll track it automatically.</li>
-          </ol>
-
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'center' }}>
-            <a
-              href="https://wa.me/923181494914?text=5FFN56"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-emerald"
-              style={{ padding: '0.75rem 1.5rem', borderRadius: '12px', fontSize: '0.9375rem' }}
-            >
-              <MessageCircle size={18} fill="#FFFFFF" />
-              <span>Open WhatsApp</span>
-            </a>
             <button
-              onClick={() => showToast('Cancelled pairing code')}
-              style={{ background: 'none', border: 'none', color: '#94A3B8', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer' }}
+              onClick={() => {
+                setLinkedAccounts(linkedAccounts.filter((a) => a.id !== acc.id));
+                showToast('Unlinked WhatsApp account');
+              }}
+              style={{ border: 'none', background: 'none', color: '#EF4444', fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer' }}
             >
-              Cancel
+              Unlink
             </button>
           </div>
-        </div>
+        ))}
+
+        {/* "+ Link another WhatsApp account" Button Card */}
+        {!showPairingBox && (
+          <div
+            onClick={handleGeneratePairingCode}
+            style={{
+              padding: '1.25rem',
+              borderRadius: '14px',
+              border: '2px dashed #06B6D4',
+              backgroundColor: '#ECFEFF',
+              textAlign: 'center',
+              cursor: 'pointer',
+              transition: 'transform 0.15s, background-color 0.2s',
+            }}
+          >
+            <span style={{ fontSize: '0.9375rem', fontWeight: 800, color: '#0891B2', display: 'block', marginBottom: '0.25rem' }}>
+              + Link another WhatsApp account
+            </span>
+            <span style={{ fontSize: '0.7813rem', color: '#64748B' }}>
+              {5 - linkedAccounts.length} slots remaining • Click to generate 6-digit WhatsApp pairing code
+            </span>
+          </div>
+        )}
+
+        {/* Dark Navy Pairing Verification Box (Revealed dynamically when user clicks Link another WhatsApp) */}
+        {showPairingBox && (
+          <div
+            className="animate-fade-in"
+            style={{
+              backgroundColor: '#0F172A',
+              color: '#FFFFFF',
+              borderRadius: '16px',
+              padding: '1.75rem',
+              boxShadow: '0 8px 24px rgba(15, 23, 42, 0.25)',
+              marginTop: '1rem',
+            }}
+          >
+            <div style={{ textAlign: 'center', marginBottom: '1.25rem' }}>
+              <div style={{ fontSize: '2.5rem', fontWeight: 900, letterSpacing: '0.35em', fontFamily: 'monospace', color: '#FFFFFF' }}>
+                {pairingCode.split('').join(' ')}
+              </div>
+              <span style={{ fontSize: '0.8125rem', color: timerSeconds > 0 ? '#94A3B8' : '#EF4444', fontWeight: 600 }}>
+                {timerSeconds > 0 ? `Expires in ${formatTimer(timerSeconds)}` : 'Code expired'}
+              </span>
+            </div>
+
+            <ol style={{ paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.625rem', fontSize: '0.875rem', color: '#E2E8F0', lineHeight: 1.5, marginBottom: '1.5rem' }}>
+              <li>Open WhatsApp on your phone and message our bot <strong>+92 3181494914</strong>.</li>
+              <li>Send the code <strong>{pairingCode}</strong> as your first message.</li>
+              <li>Once linked, share any Amazon URL and we'll track it automatically.</li>
+            </ol>
+
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'center' }}>
+              {timerSeconds > 0 ? (
+                <a
+                  href={`https://wa.me/923181494914?text=${pairingCode}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-emerald"
+                  style={{ padding: '0.75rem 1.5rem', borderRadius: '12px', fontSize: '0.9375rem' }}
+                >
+                  <MessageCircle size={18} fill="#FFFFFF" />
+                  <span>Open WhatsApp</span>
+                </a>
+              ) : (
+                <button
+                  onClick={handleGeneratePairingCode}
+                  className="btn-amber"
+                  style={{ padding: '0.75rem 1.5rem', borderRadius: '12px', fontSize: '0.9375rem' }}
+                >
+                  <span>Generate New Code</span>
+                </button>
+              )}
+
+              <button
+                onClick={() => setShowPairingBox(false)}
+                style={{ background: 'none', border: 'none', color: '#94A3B8', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer' }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* 7. "Public store page" Card (Screenshot 3) */}
