@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Ocean Teal & Amber Gold Color Palette */
+  --brand-header-bg: #0F172A;       /* Deep Navy Header */
+  --brand-primary: #06B6D4;         /* Ocean Teal */
+  --brand-primary-hover: #0891B2;
+  --brand-secondary: #F59E0B;       /* Amber Gold */
+  --brand-secondary-hover: #D97706;
+  --brand-sky: #0EA5E9;             /* Sky Blue */
+
+  --brand-teal-light: #ECFEFF;      /* Teal background tint */
+  --brand-amber-light: #FFFBEB;     /* Amber background tint */
+  
+  --brand-green: #10B981;           /* Emerald Green for stats & WhatsApp */
+  --brand-green-hover: #059669;
+  --brand-green-light: #ECFDF5;
+
+  --brand-bg: #F1F5F9;              /* Slate Light Page Background */
+  --brand-surface: #FFFFFF;         /* Card Surfaces */
+  --brand-surface-subtle: #F8FAFC;
+  --brand-text: #0F172A;            /* Deep Slate Dark Text */
+  --brand-text-muted: #64748B;      /* Slate Muted Text */
+  --brand-text-subtle: #94A3B8;
+  --brand-border: #E2E8F0;
+  --brand-border-subtle: #F1F5F9;
+  
+  --brand-pending: #F59E0B;         /* Amber pending status */
+  --brand-paid: #10B981;            /* Emerald paid status */
+
+  --brand-shadow-sm: 0 2px 4px 0 rgba(15, 23, 42, 0.04);
+  --brand-shadow-md: 0 8px 20px -2px rgba(15, 23, 42, 0.08);
+  --brand-shadow-lg: 0 20px 35px -8px rgba(6, 182, 212, 0.15);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Plus Jakarta Sans', 'Outfit', system-ui, -apple-system, sans-serif;
+  background-color: var(--brand-bg);
+  color: var(--brand-text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 99px;
+}
+
+/* Card layout */
+.ilearner-card {
+  background: var(--brand-surface);
+  border: 1px solid var(--brand-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--brand-shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.875rem 1.125rem;
+  font-size: 0.9375rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--brand-border);
+  background: var(--brand-surface);
+  color: var(--brand-text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-field:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.15);
+}
+
+.btn-teal {
+  background: linear-gradient(135deg, #06B6D4 0%, #0EA5E9 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+  padding: 0.875rem 1.5rem;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);
+  transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+}
+.btn-teal:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.45);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
