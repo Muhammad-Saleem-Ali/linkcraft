@@ -68,6 +68,92 @@ export default function EarningsSection({ showToast }: EarningsSectionProps) {
 
   const currentChart = activeMonthFilter === 'this' ? chartDataThisMonth : chartDataLastMonth;
 
+  // Dynamic Datasets based on selected month & country filter
+  const getDynamicData = () => {
+    let baseData = {
+      earningsTotal: 1958,
+      clicksTotal: 571,
+      orderedTotal: 54,
+      shippedTotal: 50,
+      returnedTotal: 4,
+      returnsValue: 863,
+      earningsByCountry: { UK: 35, US: 65, UKValue: 'Rs. 685', USValue: 'Rs. 1,273' },
+      clicksByCountry: { UK: 28, US: 72, UKValue: '160', USValue: '411' }
+    };
+
+    if (activeMonthFilter === 'last' || selectedMonth.includes('August')) {
+      baseData = {
+        earningsTotal: 1572,
+        clicksTotal: 997,
+        orderedTotal: 76,
+        shippedTotal: 75,
+        returnedTotal: 1,
+        returnsValue: 120,
+        earningsByCountry: { UK: 45, US: 55, UKValue: 'Rs. 707', USValue: 'Rs. 865' },
+        clicksByCountry: { UK: 40, US: 60, UKValue: '399', USValue: '598' }
+      };
+    } else if (selectedMonth.includes('July')) {
+      baseData = {
+        earningsTotal: 4210,
+        clicksTotal: 1840,
+        orderedTotal: 142,
+        shippedTotal: 138,
+        returnedTotal: 2,
+        returnsValue: 340,
+        earningsByCountry: { UK: 30, US: 70, UKValue: 'Rs. 1,263', USValue: 'Rs. 2,947' },
+        clicksByCountry: { UK: 25, US: 75, UKValue: '460', USValue: '1,380' }
+      };
+    } else if (selectedMonth.includes('June')) {
+      baseData = {
+        earningsTotal: 6188,
+        clicksTotal: 2450,
+        orderedTotal: 210,
+        shippedTotal: 205,
+        returnedTotal: 3,
+        returnsValue: 510,
+        earningsByCountry: { UK: 40, US: 60, UKValue: 'Rs. 2,475', USValue: 'Rs. 3,713' },
+        clicksByCountry: { UK: 35, US: 65, UKValue: '857', USValue: '1,593' }
+      };
+    }
+
+    // Apply country filters if selected
+    if (selectedCountry.includes('United States') || selectedCountry.includes('US')) {
+      const usEarnings = Math.round(baseData.earningsTotal * (baseData.earningsByCountry.US / 100));
+      const usClicks = Math.round(baseData.clicksTotal * (baseData.clicksByCountry.US / 100));
+      const usOrdered = Math.round(baseData.orderedTotal * (baseData.clicksByCountry.US / 100));
+      const usShipped = Math.round(baseData.shippedTotal * (baseData.clicksByCountry.US / 100));
+      return {
+        ...baseData,
+        earningsTotal: usEarnings,
+        clicksTotal: usClicks,
+        orderedTotal: usOrdered,
+        shippedTotal: usShipped,
+        earningsByCountry: { UK: 0, US: 100, UKValue: 'Rs. 0', USValue: `Rs. ${usEarnings.toLocaleString()}` },
+        clicksByCountry: { UK: 0, US: 100, UKValue: '0', USValue: `${usClicks.toLocaleString()}` }
+      };
+    } else if (selectedCountry.includes('United Kingdom') || selectedCountry.includes('UK')) {
+      const ukEarnings = Math.round(baseData.earningsTotal * (baseData.earningsByCountry.UK / 100));
+      const ukClicks = Math.round(baseData.clicksTotal * (baseData.clicksByCountry.UK / 100));
+      const ukOrdered = Math.round(baseData.orderedTotal * (baseData.clicksByCountry.UK / 100));
+      const ukShipped = Math.round(baseData.shippedTotal * (baseData.clicksByCountry.UK / 100));
+      return {
+        ...baseData,
+        earningsTotal: ukEarnings,
+        clicksTotal: ukClicks,
+        orderedTotal: ukOrdered,
+        shippedTotal: ukShipped,
+        returnedTotal: 0,
+        returnsValue: 0,
+        earningsByCountry: { UK: 100, US: 0, UKValue: `Rs. ${ukEarnings.toLocaleString()}`, USValue: 'Rs. 0' },
+        clicksByCountry: { UK: 100, US: 0, UKValue: `${ukClicks.toLocaleString()}`, USValue: '0' }
+      };
+    }
+
+    return baseData;
+  };
+
+  const dynamicData = getDynamicData();
+
   // Earnings history day list
   const historyDays = [
     { day: 'Sun, 13 Sept', amount: '+Rs 41', isPositive: true },
@@ -330,24 +416,34 @@ export default function EarningsSection({ showToast }: EarningsSectionProps) {
           </button>
 
           <div style={{ position: 'relative' }}>
-            <button
+            <select
+              value={selectedMonth}
+              onChange={(e) => {
+                const val = e.target.value;
+                setSelectedMonth(val);
+                if (val.includes('August')) {
+                  setActiveMonthFilter('last');
+                } else if (val.includes('September')) {
+                  setActiveMonthFilter('this');
+                }
+              }}
               style={{
                 padding: '0.5rem 1rem',
                 borderRadius: '10px',
-                border: '1px solid #E5E7EB',
+                border: '1px solid #E2E8F0',
                 backgroundColor: '#FFFFFF',
                 fontSize: '0.875rem',
-                fontWeight: 600,
-                color: '#1E1B4B',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
+                fontWeight: 700,
+                color: '#0F172A',
                 cursor: 'pointer',
+                outline: 'none',
               }}
             >
-              <span>{selectedMonth}</span>
-              <Calendar size={15} color="#6B7280" />
-            </button>
+              <option value="September 2026">September 2026</option>
+              <option value="August 2026">August 2026</option>
+              <option value="July 2026">July 2026</option>
+              <option value="June 2026">June 2026</option>
+            </select>
           </div>
 
           <select
@@ -443,73 +539,171 @@ export default function EarningsSection({ showToast }: EarningsSectionProps) {
         </div>
 
         {/* Donut Charts Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
-          <div style={{ padding: '1.25rem', borderRadius: '14px', border: '1px solid #E5E7EB', backgroundColor: '#FFFFFF' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h4 style={{ fontSize: '0.9375rem', fontWeight: 800, color: '#1E1B4B' }}>Your earnings by country</h4>
-              <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Your share</span>
+        <div className="responsive-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+          {/* 1. Earnings by Country Donut */}
+          <div className="ilearner-card" style={{ padding: '1.25rem', backgroundColor: '#FFFFFF' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+              <h4 style={{ fontSize: '0.9375rem', fontWeight: 800, color: '#0F172A' }}>Your earnings by country</h4>
+              <span style={{ fontSize: '0.75rem', color: '#94A3B8', fontWeight: 600 }}>Your share</span>
             </div>
-            <div style={{ height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="120" height="120" viewBox="0 0 42 42">
-                <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#E5E7EB" strokeWidth="5" />
-                <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#0284C7" strokeWidth="5" strokeDasharray="60 40" strokeDashoffset="25" />
-                <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#00C875" strokeWidth="5" strokeDasharray="40 60" strokeDashoffset="85" />
+
+            <div style={{ position: 'relative', height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="135" height="135" viewBox="0 0 42 42">
+                <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F1F5F9" strokeWidth="5.5" />
+                {/* US Segment (Ocean Teal #06B6D4) */}
+                <circle
+                  cx="21"
+                  cy="21"
+                  r="15.91549430918954"
+                  fill="transparent"
+                  stroke="#06B6D4"
+                  strokeWidth="5.5"
+                  strokeDasharray={`${dynamicData.earningsByCountry.US} ${100 - dynamicData.earningsByCountry.US}`}
+                  strokeDashoffset="25"
+                  style={{ transition: 'stroke-dasharray 0.5s ease' }}
+                />
+                {/* UK Segment (Emerald Green #10B981) */}
+                <circle
+                  cx="21"
+                  cy="21"
+                  r="15.91549430918954"
+                  fill="transparent"
+                  stroke="#10B981"
+                  strokeWidth="5.5"
+                  strokeDasharray={`${dynamicData.earningsByCountry.UK} ${100 - dynamicData.earningsByCountry.UK}`}
+                  strokeDashoffset={`${25 - dynamicData.earningsByCountry.US}`}
+                  style={{ transition: 'stroke-dasharray 0.5s ease' }}
+                />
               </svg>
+              
+              <div style={{ position: 'absolute', textAlign: 'center' }}>
+                <span style={{ fontSize: '1.125rem', fontWeight: 800, color: '#0F172A', display: 'block', lineHeight: 1 }}>
+                  Rs. {dynamicData.earningsTotal.toLocaleString()}
+                </span>
+                <span style={{ fontSize: '0.6875rem', color: '#64748B', fontWeight: 600 }}>Total Earned</span>
+              </div>
+            </div>
+
+            {/* Legend matching reference screenshot: ■ UK ■ US */}
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1.25rem', marginTop: '0.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', fontWeight: 700, color: '#10B981' }}>
+                <div style={{ width: '10px', height: '10px', backgroundColor: '#10B981', borderRadius: '2px' }} />
+                <span>UK ({dynamicData.earningsByCountry.UK}%)</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', fontWeight: 700, color: '#06B6D4' }}>
+                <div style={{ width: '10px', height: '10px', backgroundColor: '#06B6D4', borderRadius: '2px' }} />
+                <span>US ({dynamicData.earningsByCountry.US}%)</span>
+              </div>
             </div>
           </div>
 
-          <div style={{ padding: '1.25rem', borderRadius: '14px', border: '1px solid #E5E7EB', backgroundColor: '#FFFFFF' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h4 style={{ fontSize: '0.9375rem', fontWeight: 800, color: '#1E1B4B' }}>Your clicks by country</h4>
-              <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Amazon-reported</span>
+          {/* 2. Clicks by Country Donut */}
+          <div className="ilearner-card" style={{ padding: '1.25rem', backgroundColor: '#FFFFFF' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+              <h4 style={{ fontSize: '0.9375rem', fontWeight: 800, color: '#0F172A' }}>Your clicks by country</h4>
+              <span style={{ fontSize: '0.75rem', color: '#94A3B8', fontWeight: 600 }}>Amazon-reported</span>
             </div>
-            <div style={{ height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="120" height="120" viewBox="0 0 42 42">
-                <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#E5E7EB" strokeWidth="5" />
-                <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#00C875" strokeWidth="5" strokeDasharray="75 25" strokeDashoffset="25" />
-                <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#0284C7" strokeWidth="5" strokeDasharray="25 75" strokeDashoffset="100" />
+
+            <div style={{ position: 'relative', height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="135" height="135" viewBox="0 0 42 42">
+                <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F1F5F9" strokeWidth="5.5" />
+                {/* US Segment (Ocean Teal #06B6D4) */}
+                <circle
+                  cx="21"
+                  cy="21"
+                  r="15.91549430918954"
+                  fill="transparent"
+                  stroke="#06B6D4"
+                  strokeWidth="5.5"
+                  strokeDasharray={`${dynamicData.clicksByCountry.US} ${100 - dynamicData.clicksByCountry.US}`}
+                  strokeDashoffset="25"
+                  style={{ transition: 'stroke-dasharray 0.5s ease' }}
+                />
+                {/* UK Segment (Emerald Green #10B981) */}
+                <circle
+                  cx="21"
+                  cy="21"
+                  r="15.91549430918954"
+                  fill="transparent"
+                  stroke="#10B981"
+                  strokeWidth="5.5"
+                  strokeDasharray={`${dynamicData.clicksByCountry.UK} ${100 - dynamicData.clicksByCountry.UK}`}
+                  strokeDashoffset={`${25 - dynamicData.clicksByCountry.US}`}
+                  style={{ transition: 'stroke-dasharray 0.5s ease' }}
+                />
               </svg>
+
+              <div style={{ position: 'absolute', textAlign: 'center' }}>
+                <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0F172A', display: 'block', lineHeight: 1 }}>
+                  {dynamicData.clicksTotal.toLocaleString()}
+                </span>
+                <span style={{ fontSize: '0.6875rem', color: '#64748B', fontWeight: 600 }}>Clicks</span>
+              </div>
+            </div>
+
+            {/* Legend matching reference screenshot: ■ UK ■ US */}
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1.25rem', marginTop: '0.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', fontWeight: 700, color: '#10B981' }}>
+                <div style={{ width: '10px', height: '10px', backgroundColor: '#10B981', borderRadius: '2px' }} />
+                <span>UK ({dynamicData.clicksByCountry.UK}%)</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', fontWeight: 700, color: '#06B6D4' }}>
+                <div style={{ width: '10px', height: '10px', backgroundColor: '#06B6D4', borderRadius: '2px' }} />
+                <span>US ({dynamicData.clicksByCountry.US}%)</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 5. Six Metric Cards Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+      {/* 5. Six Metric Cards Grid (Dynamic) */}
+      <div className="responsive-grid-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
         <div className="ilearner-card">
-          <span style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 600 }}>Your Earnings</span>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0284C7', margin: '0.25rem 0' }}>Rs. 1,958</div>
-          <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Commission you've earned</span>
+          <span style={{ fontSize: '0.8125rem', color: '#64748B', fontWeight: 600 }}>Your Earnings</span>
+          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#06B6D4', margin: '0.25rem 0' }}>
+            Rs. {dynamicData.earningsTotal.toLocaleString()}
+          </div>
+          <span style={{ fontSize: '0.75rem', color: '#94A3B8' }}>Commission you've earned</span>
         </div>
 
         <div className="ilearner-card">
-          <span style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 600 }}>Clicks</span>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0284C7', margin: '0.25rem 0' }}>571</div>
-          <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Amazon-reported clicks on your links</span>
+          <span style={{ fontSize: '0.8125rem', color: '#64748B', fontWeight: 600 }}>Clicks</span>
+          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0EA5E9', margin: '0.25rem 0' }}>
+            {dynamicData.clicksTotal.toLocaleString()}
+          </div>
+          <span style={{ fontSize: '0.75rem', color: '#94A3B8' }}>Amazon-reported clicks on your links</span>
         </div>
 
         <div className="ilearner-card">
-          <span style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 600 }}>Ordered</span>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#00C875', margin: '0.25rem 0' }}>54</div>
-          <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Purchases from your links</span>
+          <span style={{ fontSize: '0.8125rem', color: '#64748B', fontWeight: 600 }}>Ordered</span>
+          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#10B981', margin: '0.25rem 0' }}>
+            {dynamicData.orderedTotal}
+          </div>
+          <span style={{ fontSize: '0.75rem', color: '#94A3B8' }}>Purchases from your links</span>
         </div>
 
         <div className="ilearner-card">
-          <span style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 600 }}>Shipped</span>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#F59E0B', margin: '0.25rem 0' }}>50</div>
-          <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>You earn when items ship</span>
+          <span style={{ fontSize: '0.8125rem', color: '#64748B', fontWeight: 600 }}>Shipped</span>
+          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#F59E0B', margin: '0.25rem 0' }}>
+            {dynamicData.shippedTotal}
+          </div>
+          <span style={{ fontSize: '0.75rem', color: '#94A3B8' }}>You earn when items ship</span>
         </div>
 
         <div className="ilearner-card">
-          <span style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 600 }}>Returned</span>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#EF4444', margin: '0.25rem 0' }}>4</div>
-          <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Items customers returned</span>
+          <span style={{ fontSize: '0.8125rem', color: '#64748B', fontWeight: 600 }}>Returned</span>
+          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#EF4444', margin: '0.25rem 0' }}>
+            {dynamicData.returnedTotal}
+          </div>
+          <span style={{ fontSize: '0.75rem', color: '#94A3B8' }}>Items customers returned</span>
         </div>
 
         <div className="ilearner-card">
-          <span style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 600 }}>Returns Value</span>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#EF4444', margin: '0.25rem 0' }}>Rs. 863</div>
-          <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Commission deducted by returns</span>
+          <span style={{ fontSize: '0.8125rem', color: '#64748B', fontWeight: 600 }}>Returns Value</span>
+          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#EF4444', margin: '0.25rem 0' }}>
+            Rs. {dynamicData.returnsValue.toLocaleString()}
+          </div>
+          <span style={{ fontSize: '0.75rem', color: '#94A3B8' }}>Commission deducted by returns</span>
         </div>
       </div>
 

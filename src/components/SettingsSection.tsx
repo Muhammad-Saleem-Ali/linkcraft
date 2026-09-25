@@ -152,32 +152,114 @@ export default function SettingsSection({ showToast }: SettingsSectionProps) {
       {/* 3. "Get ready for payouts" Progress Card (Screenshot 1) */}
       <div
         style={{
-          backgroundColor: '#FEFCE8',
-          border: '1px solid #FEF08A',
-          borderRadius: '16px',
-          padding: '1.25rem 1.5rem',
+          backgroundColor: '#FFFBEB',
+          border: '1px solid #FDE68A',
+          borderRadius: '20px',
+          padding: '1.5rem',
           display: 'flex',
           flexDirection: 'column',
-          gap: '0.75rem',
+          gap: '1rem',
+          boxShadow: 'var(--brand-shadow-sm)',
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-            <div style={{ width: '32px', height: '32px', borderRadius: '8px', backgroundColor: '#FEF08A', color: '#854D0E', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <CheckSquare size={18} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#FEF3C7', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <CheckSquare size={20} />
             </div>
-            <span style={{ fontSize: '1rem', fontWeight: 800, color: '#1E1B4B' }}>Get ready for payouts</span>
+            <div>
+              <span style={{ fontSize: '1.0625rem', fontWeight: 800, color: '#0F172A', display: 'block' }}>
+                Get ready for payouts
+              </span>
+              <span style={{ fontSize: '0.8125rem', color: '#B45309' }}>
+                Finish these before your first payout is due
+              </span>
+            </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#854D0E' }}>3 of 5</span>
-            <ChevronDown size={18} color="#854D0E" />
+            <span style={{ fontSize: '0.875rem', fontWeight: 800, color: '#D97706' }}>3 of 5</span>
+            <ChevronDown size={18} color="#D97706" />
           </div>
         </div>
 
         {/* Progress bar */}
-        <div style={{ width: '100%', height: '8px', backgroundColor: '#FEF08A', borderRadius: '99px', overflow: 'hidden' }}>
-          <div style={{ width: '60%', height: '100%', backgroundColor: '#F59E0B', borderRadius: '99px' }} />
+        <div style={{ width: '100%', height: '8px', backgroundColor: '#FEF3C7', borderRadius: '99px', overflow: 'hidden' }}>
+          <div style={{ width: '60%', height: '100%', background: 'linear-gradient(90deg, #F59E0B 0%, #D97706 100%)', borderRadius: '99px' }} />
+        </div>
+
+        {/* Checklist items (Matching Screenshot 1) */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', marginTop: '0.5rem' }}>
+          {/* Item 1 */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: '#D1FAE5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem' }}>
+                ✓
+              </div>
+              <div>
+                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>Add your name</span>
+                <span style={{ fontSize: '0.7813rem', color: '#64748B', display: 'block' }}>Ahmar</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Item 2 */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: '#D1FAE5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem' }}>
+                ✓
+              </div>
+              <div>
+                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>Add your phone number</span>
+                <span style={{ fontSize: '0.7813rem', color: '#64748B', display: 'block' }}>03288539597</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Item 3 */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{ width: '22px', height: '22px', borderRadius: '50%', border: '2px dashed #F59E0B', backgroundColor: 'transparent' }} />
+              <div>
+                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>Set up your bank / wallet</span>
+              </div>
+            </div>
+            <button
+              onClick={() => showToast('Opening bank setup...')}
+              style={{ background: 'none', border: 'none', color: '#06B6D4', fontWeight: 700, fontSize: '0.8125rem', cursor: 'pointer' }}
+            >
+              Set up ›
+            </button>
+          </div>
+
+          {/* Item 4 */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{ width: '22px', height: '22px', borderRadius: '50%', border: '2px dashed #F59E0B', backgroundColor: 'transparent' }} />
+              <div>
+                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>Turn on two-factor authentication</span>
+                <span style={{ fontSize: '0.75rem', color: '#94A3B8', display: 'block' }}>Optional but strongly recommended</span>
+              </div>
+            </div>
+            <button
+              onClick={() => showToast('Opening 2FA setup...')}
+              style={{ background: 'none', border: 'none', color: '#06B6D4', fontWeight: 700, fontSize: '0.8125rem', cursor: 'pointer' }}
+            >
+              Set up ›
+            </button>
+          </div>
+
+          {/* Item 5 */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: '#D1FAE5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem' }}>
+                ✓
+              </div>
+              <div>
+                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>Link your WhatsApp account</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -329,20 +411,20 @@ export default function SettingsSection({ showToast }: SettingsSectionProps) {
         </form>
       </div>
 
-      {/* 6. "WhatsApp accounts" Card (Screenshot 2 & 3) */}
+      {/* 6. "WhatsApp accounts" Card (Screenshot 2) */}
       <div className="ilearner-card" style={{ padding: '1.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
             <div style={{ width: '38px', height: '38px', borderRadius: '10px', backgroundColor: '#ECFDF5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <MessageCircle size={20} color="#00C875" fill="#00C875" />
+              <MessageCircle size={20} color="#10B981" fill="#10B981" />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.0625rem', fontWeight: 800, color: '#1E1B4B' }}>WhatsApp accounts</h3>
-              <span style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Link once — send Amazon URLs, get commissions</span>
+              <h3 style={{ fontSize: '1.0625rem', fontWeight: 800, color: '#0F172A' }}>WhatsApp accounts</h3>
+              <span style={{ fontSize: '0.8125rem', color: '#64748B' }}>Link once — send Amazon URLs, get commissions</span>
             </div>
           </div>
 
-          <span style={{ padding: '0.2rem 0.625rem', borderRadius: '99px', backgroundColor: '#F3E8FF', color: '#7C00FF', fontSize: '0.75rem', fontWeight: 700 }}>
+          <span style={{ padding: '0.2rem 0.625rem', borderRadius: '99px', backgroundColor: '#ECFEFF', color: '#0891B2', fontSize: '0.75rem', fontWeight: 700 }}>
             1 / 5 linked
           </span>
         </div>
@@ -352,23 +434,24 @@ export default function SettingsSection({ showToast }: SettingsSectionProps) {
           style={{
             padding: '1rem 1.25rem',
             borderRadius: '14px',
-            backgroundColor: '#F9FAFB',
-            border: '1px solid #E5E7EB',
+            backgroundColor: '#F8FAFC',
+            border: '1px solid #E2E8F0',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: '1rem',
+            marginBottom: '1.25rem',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#00C875', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <MessageCircle size={20} color="#FFFFFF" fill="#FFFFFF" />
             </div>
             <div>
-              <div style={{ fontWeight: 800, fontSize: '0.9375rem', color: '#1E1B4B' }}>
-                ❤️ Ahmar Pmm 8
+              <div style={{ fontWeight: 800, fontSize: '0.9375rem', color: '#0F172A', display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                <span>❤️ Ahmar Pmm</span>
+                <span style={{ fontSize: '0.6875rem', backgroundColor: '#E2E8F0', padding: '0.1rem 0.375rem', borderRadius: '4px', color: '#475569' }}>8</span>
               </div>
-              <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>
+              <span style={{ fontSize: '0.75rem', color: '#64748B' }}>
                 161332...@lid • Linked Jul 31, 2026
               </span>
             </div>
@@ -376,72 +459,103 @@ export default function SettingsSection({ showToast }: SettingsSectionProps) {
 
           <button
             onClick={() => showToast('Unlinked WhatsApp account')}
-            style={{ border: 'none', background: 'none', color: '#DC2626', fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer' }}
+            style={{ border: 'none', background: 'none', color: '#EF4444', fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer' }}
           >
             Unlink
           </button>
         </div>
 
-        {/* Add another WhatsApp account button */}
+        {/* Pairing verification code dark box (Screenshot 2) */}
         <div
-          onClick={() => showToast('Opening WhatsApp link dialog...')}
           style={{
-            padding: '1rem',
-            borderRadius: '14px',
-            border: '2px dashed #D8B4FE',
-            backgroundColor: '#FFFFFF',
-            textAlign: 'center',
-            cursor: 'pointer',
+            backgroundColor: '#0F172A',
+            color: '#FFFFFF',
+            borderRadius: '16px',
+            padding: '1.75rem',
+            boxShadow: '0 8px 24px rgba(15, 23, 42, 0.25)',
           }}
         >
-          <span style={{ fontSize: '0.9375rem', fontWeight: 800, color: '#7C00FF', display: 'block' }}>
-            + Link another WhatsApp account
-          </span>
-          <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>4 slots remaining</span>
+          <div style={{ textAlign: 'center', marginBottom: '1.25rem' }}>
+            <div style={{ fontSize: '2.5rem', fontWeight: 900, letterSpacing: '0.35em', fontFamily: 'monospace', color: '#FFFFFF' }}>
+              5 F F N 5 6
+            </div>
+            <span style={{ fontSize: '0.8125rem', color: '#94A3B8', fontWeight: 600 }}>
+              Expires in 01:53
+            </span>
+          </div>
+
+          <ol style={{ paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.625rem', fontSize: '0.875rem', color: '#E2E8F0', lineHeight: 1.5, marginBottom: '1.5rem' }}>
+            <li>Open WhatsApp on your phone and message our bot <strong>+92 3181494914</strong>.</li>
+            <li>Send the code above as your first message.</li>
+            <li>Once linked, share any Amazon URL and we'll track it automatically.</li>
+          </ol>
+
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'center' }}>
+            <a
+              href="https://wa.me/923181494914?text=5FFN56"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-emerald"
+              style={{ padding: '0.75rem 1.5rem', borderRadius: '12px', fontSize: '0.9375rem' }}
+            >
+              <MessageCircle size={18} fill="#FFFFFF" />
+              <span>Open WhatsApp</span>
+            </a>
+            <button
+              onClick={() => showToast('Cancelled pairing code')}
+              style={{ background: 'none', border: 'none', color: '#94A3B8', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer' }}
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
 
       {/* 7. "Public store page" Card (Screenshot 3) */}
       <div className="ilearner-card" style={{ padding: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', marginBottom: '1.25rem' }}>
-          <div style={{ width: '38px', height: '38px', borderRadius: '10px', backgroundColor: '#F3E8FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Globe size={20} color="#7C00FF" />
+          <div style={{ width: '38px', height: '38px', borderRadius: '10px', backgroundColor: '#ECFEFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Globe size={20} color="#06B6D4" />
           </div>
           <div>
-            <h3 style={{ fontSize: '1.0625rem', fontWeight: 800, color: '#1E1B4B' }}>Public store page</h3>
-            <span style={{ fontSize: '0.8125rem', color: '#6B7280' }}>A single link to share your curated products</span>
+            <h3 style={{ fontSize: '1.0625rem', fontWeight: 800, color: '#0F172A' }}>Public store page</h3>
+            <span style={{ fontSize: '0.8125rem', color: '#64748B' }}>A single link to share your curated products</span>
           </div>
         </div>
 
-        <div style={{ padding: '1.25rem', borderRadius: '14px', border: '1px solid #E5E7EB', backgroundColor: '#FFFFFF' }}>
-          <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#1E1B4B', marginBottom: '0.375rem' }}>Public store page</h4>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '1.25rem', lineHeight: 1.5 }}>
+        <div style={{ padding: '1.25rem', borderRadius: '14px', border: '1px solid #E2E8F0', backgroundColor: '#FFFFFF' }}>
+          <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#0F172A', marginBottom: '0.375rem' }}>Public store page</h4>
+          <p style={{ fontSize: '0.8125rem', color: '#64748B', marginBottom: '1.25rem', lineHeight: 1.5 }}>
             Get a personal page you can share with your audience. They'll see your latest products, and you can choose whether to roll your day's, yesterday's, or this week's links.
           </p>
 
           <div style={{ marginBottom: '1.25rem' }}>
-            <span style={{ fontSize: '0.75rem', color: '#9CA3AF', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>Your URL</span>
+            <span style={{ fontSize: '0.75rem', color: '#94A3B8', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>Your URL</span>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
-              <span style={{ fontSize: '1rem', fontWeight: 800, fontFamily: 'monospace', color: '#1E1B4B' }}>
-                https://ilearner.dev/u/{storeSlug}
+              <span style={{ fontSize: '1rem', fontWeight: 800, fontFamily: 'monospace', color: '#0F172A' }}>
+                https://linkcraft.dev/u/{storeSlug}
               </span>
 
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <button
                   onClick={() => {
-                    navigator.clipboard.writeText(`https://ilearner.dev/u/${storeSlug}`);
+                    navigator.clipboard.writeText(`https://linkcraft.dev/u/${storeSlug}`);
                     showToast('Copied public store URL!');
                   }}
-                  style={{ padding: '0.375rem 0.875rem', borderRadius: '8px', border: '1px solid #E5E7EB', backgroundColor: '#FFFFFF', fontSize: '0.8125rem', fontWeight: 600, color: '#374151', cursor: 'pointer' }}
+                  className="btn-secondary btn-sm"
                 >
+                  <Copy size={14} />
                   Copy link
                 </button>
-                <button
-                  onClick={() => showToast('Slug edit dialog')}
-                  style={{ padding: '0.375rem 0.875rem', borderRadius: '8px', border: '1px solid #E5E7EB', backgroundColor: '#FFFFFF', fontSize: '0.8125rem', fontWeight: 600, color: '#374151', cursor: 'pointer' }}
+                <a
+                  href={`/u/${storeSlug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-teal btn-sm"
                 >
-                  Change slug
-                </button>
+                  <ExternalLink size={14} />
+                  View Store Page
+                </a>
               </div>
             </div>
           </div>
@@ -456,6 +570,8 @@ export default function SettingsSection({ showToast }: SettingsSectionProps) {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '0.75rem',
             }}
           >
             <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#047857' }}>
@@ -467,7 +583,7 @@ export default function SettingsSection({ showToast }: SettingsSectionProps) {
                 setIsPageLive(!isPageLive);
                 showToast(isPageLive ? 'Public page disabled' : 'Public page is live!');
               }}
-              style={{ padding: '0.375rem 0.875rem', borderRadius: '8px', border: '1px solid #FCA5A5', backgroundColor: '#FFFFFF', color: '#DC2626', fontSize: '0.8125rem', fontWeight: 700, cursor: 'pointer' }}
+              style={{ padding: '0.375rem 0.875rem', borderRadius: '8px', border: '1px solid #FCA5A5', backgroundColor: '#FFFFFF', color: '#EF4444', fontSize: '0.8125rem', fontWeight: 700, cursor: 'pointer' }}
             >
               Disable page
             </button>
