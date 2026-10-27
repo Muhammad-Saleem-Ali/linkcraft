@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String            @id @map("id")
+  name             String            @map("name")
+  email            String            @unique @map("email")
+  passwordHash     String            @map("password_hash")
+  phone            String?           @default("") @map("phone")
+  role             String            @default("partner") @map("role")
+  status           String            @default("active") @map("status")
+  commissionRate   Decimal           @default(0.70) @map("commission_rate") @db.Decimal(5, 2)
+  currentlyOwed    Decimal           @default(0.00) @map("currently_owed") @db.Decimal(12, 2)
+  lifetimeEarnings Decimal           @default(0.00) @map("lifetime_earnings") @db.Decimal(12, 2)
+  totalPaidOut     Decimal           @default(0.00) @map("total_paid_out") @db.Decimal(12, 2)
+  bankName         String?           @default("") @map("bank_name")
+  accountTitle     String?           @default("") @map("account_title")
+  iban             String?           @default("") @map("iban")
+  storeSlug        String?           @unique @map("store_slug")
+  isPageLive       Boolean           @default(true) @map("is_page_live")
+  twoFactorEnabled Boolean           @default(false) @map("two_factor_enabled")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @default(now()) @updatedAt @map("updated_at")
+
+  affiliateLinks   AffiliateLink[]
+  linkClicks       LinkClick[]
+  earningsReports  EarningsReport[]
+  payouts          Payout[]
+  linkedAccounts   LinkedAccount[]
+  pairingCodes     PairingCode[]
+
+  @@map("users")
+}
+
+model AffiliateLink {
+  id             String           @id @map("id")
+  userId         String           @map("user_id")
+  name           String           @map("name")
+  destinationUrl String           @map("destination_url")
+  affiliateUrl   String           @map("affiliate_url")
+  shortSlug      String           @unique @map("short_slug")
+  shortUrl       String           @map("short_url")
+  showcaseUrl    String           @map("showcase_url")
+  country        String           @default("🇺🇸") @map("country")
+  views          Int              @default(0) @map("views")
+  clicks         Int              @default(0) @map("clicks")
+  rating         String           @default("5.0 ★") @map("rating")
+  price          String           @default("$24.99") @map("price")
+  originalPrice  String           @default("$29.99") @map("original_price")
+  imageUrl       String?          @default("") @map("image_url")
+  asin           String?          @default("") @map("asin")
+  features       Json             @default("[]") @map("features")
+  status         String           @default("active") @map("status")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @default(now()) @updatedAt @map("updated_at")
+
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  linkClicks     LinkClick[]
+  earnings       EarningsReport[]
+
+  @@map("affiliate_links")
+}
+
+model LinkClick {
+  id        Int           @id @default(autoincrement()) @map("id")
+  linkId    String        @map("link_id")
+  userId    String        @map("user_id")
+  shortSlug String        @map("short_slug")
+  ipAddress String?       @default("") @map("ip_address")
+  userAgent String?       @default("") @map("user_agent")
+  referrer  String?       @default("") @map("referrer")
+  country   String?       @default("🇺🇸") @map("country")
+  createdAt DateTime      @default(now()) @map("created_at")
+
+  link      AffiliateLink @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("link_clicks")
+}
+
+model EarningsReport {
+  id               Int            @id @default(autoincrement()) @map("id")
+  userId           String         @map("user_id")
+  linkId           String?        @map("link_id")
+  month            String         @map("month")
+  productName      String         @map("product_name")
+  orderedCount     Int            @default(1) @map("ordered_count")
+  shippedCount     Int            @default(1) @map("shipped_count")
+  returnedCount    Int            @default(0) @map("returned_count")
+  revenueAmount    Decimal        @default(0.00) @map("revenue_amount") @db.Decimal(12, 2)
+  commissionAmount Decimal        @default(0.00) @map("commission_amount") @db.Decimal(12, 2)
+  status           String         @default("active") @map("status")
+  country          String         @default("US") @map("country")
+  createdAt        DateTime       @default(now()) @map("created_at")
+
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  link             AffiliateLink? @relation(fields: [linkId], references: [id], onDelete: SetNull)
+
+  @@map("earnings_reports")
+}
+
+model Payout {
+  id            String    @id @map("id")
+  payoutTag     String    @default("PAYOUT#202") @map("payout_tag")
+  userId        String    @map("user_id")
+  amount        Decimal   @map("amount") @db.Decimal(12, 2)
+  status        String    @default("pending") @map("status")
+  monthCovered  String    @map("month_covered")
+  countries     String    @default("🇺🇸 🇬🇧") @map("countries")
+  paymentMethod String    @default("Bank Transfer") @map("payment_method")
+  receiptTitle  String    @default("Payout receipt") @map("receipt_title")
+  receiptUrl    String?   @default("") @map("receipt_url")
+  paidAt        DateTime? @map("paid_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("payouts")
+}
+
+model LinkedAccount {
+  id          String   @id @map("id")
+  userId      String   @map("user_id")
+  name        String   @map("name")
+  phoneOrLid  String   @map("phone_or_lid")
+  tag         String   @default("8") @map("tag")
+  status      String   @default("active") @map("status")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("linked_accounts")
+}
+
+model PairingCode {
+  id        Int      @id @default(autoincrement()) @map("id")
+  userId    String   @map("user_id")
+  code      String   @map("code")
+  expiresAt DateTime @map("expires_at")
+  isUsed    Boolean  @default(false) @map("is_used")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("pairing_codes")
+}
