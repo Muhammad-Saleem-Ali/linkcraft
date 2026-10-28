@@ -150,10 +150,17 @@ export async function updateUserStatus(req, res) {
         if (result.rows.length === 0) {
             return res.status(404).json({ success: false, error: 'User not found' });
         }
+        const updatedUser = result.rows[0];
+        realtimeHub.broadcast({
+            type: 'USER_STATUS_CHANGED',
+            userId: updatedUser.id,
+            status: updatedUser.status,
+            user: updatedUser,
+        });
         return res.json({
             success: true,
             message: `User status updated to ${status}`,
-            user: result.rows[0],
+            user: updatedUser,
         });
     }
     catch (err) {

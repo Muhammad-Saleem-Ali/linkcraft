@@ -35,6 +35,10 @@ export default function DashboardPage() {
 
         const cachedUser = getCurrentUser();
         if (cachedUser) {
+            if (cachedUser.status === 'suspended') {
+                logout('suspended');
+                return;
+            }
             if (cachedUser.role === 'admin') {
                 router.replace('/admin');
                 return;
@@ -47,13 +51,21 @@ export default function DashboardPage() {
         authFetch('/api/auth/me')
             .then((res) => {
                 if (res.status === 401) {
-                    logout();
+                    logout('expired');
+                    return null;
+                }
+                if (res.status === 403) {
+                    logout('suspended');
                     return null;
                 }
                 return res.json();
             })
             .then((data) => {
                 if (data && data.success && data.user) {
+                    if (data.user.status === 'suspended') {
+                        logout('suspended');
+                        return;
+                    }
                     if (data.user.role === 'admin') {
                         router.replace('/admin');
                         return;

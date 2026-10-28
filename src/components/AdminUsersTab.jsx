@@ -24,7 +24,11 @@ export default function AdminUsersTab({ users, onUpdateStatus, onUpdateCommissio
             if (selectedUser && selectedUser.id === userId) {
                 setSelectedUser(prev => prev ? { ...prev, status: newStatus } : null);
             }
-            showToast(`User status updated to ${newStatus}`);
+            if (newStatus === 'suspended') {
+                showToast('User account suspended & session automatically terminated');
+            } else {
+                showToast(`User status updated to ${newStatus}`);
+            }
         }
         catch (err) {
             showToast(err.message || 'Failed to update user status');

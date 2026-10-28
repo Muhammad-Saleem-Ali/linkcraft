@@ -40,12 +40,28 @@ export async function authFetch(url, options = {}) {
         ...options,
         headers,
     });
+
+    if (res.status === 401) {
+        logout('expired');
+    } else if (res.status === 403) {
+        try {
+            const clone = res.clone();
+            const data = await clone.json();
+            if (data?.suspended || (data?.error && data.error.toLowerCase().includes('suspend'))) {
+                logout('suspended');
+            }
+        } catch {
+            // Not JSON or stream consumed
+        }
+    }
+
     return res;
 }
-export function logout() {
+export function logout(reason = null) {
     if (typeof window !== 'undefined') {
         localStorage.removeItem('linkcraft_token');
         localStorage.removeItem('linkcraft_user');
-        window.location.href = '/login';
+        const query = reason ? `?reason=${encodeURIComponent(reason)}` : '';
+        window.location.href = `/login${query}`;
     }
 }

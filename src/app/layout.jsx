@@ -68,6 +68,8 @@ export const metadata = {
         apple: "/apple-touch-icon.png",
     },
 };
+import SessionWatcher from '@/components/SessionWatcher';
+
 export default function RootLayout({ children, }) {
     const jsonLd = {
         "@context": "https://schema.org",
@@ -87,6 +89,10 @@ export default function RootLayout({ children, }) {
       <head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}/>
       </head>
-      <body>{children}</body>
+      <body>
+        <SessionWatcher />
+        {children}
+      </body>
     </html>);
 }
+

@@ -18,16 +18,29 @@ export default function CreateAffiliateLinkPage() {
             router.replace('/login');
             return;
         }
+        const cached = getCurrentUser();
+        if (cached && cached.status === 'suspended') {
+            logout('suspended');
+            return;
+        }
         authFetch('/api/auth/me')
             .then(res => {
+                if (res.status === 403) {
+                    logout('suspended');
+                    return;
+                }
                 if (!res.ok) {
-                    logout();
+                    logout('expired');
                     return;
                 }
                 return res.json();
             })
             .then(data => {
                 if (data && data.success && data.user) {
+                    if (data.user.status === 'suspended') {
+                        logout('suspended');
+                        return;
+                    }
                     setIsVerifying(false);
                 } else {
                     logout();

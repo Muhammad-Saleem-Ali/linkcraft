@@ -20,9 +20,19 @@ export default function Header({ activeTab, setActiveTab }) {
         const local = getCurrentUser();
         if (local) setUser(local);
         authFetch('/api/auth/me')
-            .then(res => res.json())
+            .then(res => {
+                if (res.status === 403) {
+                    logout('suspended');
+                    return null;
+                }
+                return res.json();
+            })
             .then(data => {
-                if (data.success && data.user) {
+                if (data?.success && data?.user) {
+                    if (data.user.status === 'suspended') {
+                        logout('suspended');
+                        return;
+                    }
                     setUser(data.user);
                 }
             })

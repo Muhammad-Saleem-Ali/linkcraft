@@ -13,7 +13,11 @@ export async function login(req, res) {
         }
         const user = result.rows[0];
         if (user.status === 'suspended') {
-            return res.status(403).json({ success: false, error: 'Your affiliate account has been suspended by administration.' });
+            return res.status(403).json({
+                success: false,
+                error: 'Your affiliate account has been suspended by administration.',
+                suspended: true,
+            });
         }
         const isMatch = await bcrypt.compare(password, user.password_hash);
         if (!isMatch) {
@@ -104,6 +108,13 @@ export async function getMe(req, res) {
             return res.status(404).json({ success: false, error: 'User account not found' });
         }
         const row = result.rows[0];
+        if (row.status === 'suspended') {
+            return res.status(403).json({
+                success: false,
+                error: 'Your affiliate account has been suspended by administration.',
+                suspended: true,
+            });
+        }
         return res.json({
             success: true,
             user: {

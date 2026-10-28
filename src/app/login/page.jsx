@@ -20,6 +20,17 @@ export default function LoginPage() {
     const [successMessage, setSuccessMessage] = useState(null);
 
     useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const urlParams = new URLSearchParams(window.location.search);
+            const reason = urlParams.get('reason') || (urlParams.get('suspended') === '1' ? 'suspended' : null);
+            if (reason === 'suspended') {
+                localStorage.removeItem('linkcraft_token');
+                localStorage.removeItem('linkcraft_user');
+                setErrorMessage('Your affiliate account has been suspended by administration. Access has been revoked. Please contact support if you need assistance.');
+                return;
+            }
+        }
+
         const token = getAuthToken();
         const user = getCurrentUser();
         if (token && user) {
@@ -30,6 +41,12 @@ export default function LoginPage() {
                 })
                 .then(data => {
                     if (data.success && data.user) {
+                        if (data.user.status === 'suspended') {
+                            localStorage.removeItem('linkcraft_token');
+                            localStorage.removeItem('linkcraft_user');
+                            setErrorMessage('Your affiliate account has been suspended by administration.');
+                            return;
+                        }
                         if (data.user.role === 'admin') router.push('/admin');
                         else router.push('/dashboard');
                     }

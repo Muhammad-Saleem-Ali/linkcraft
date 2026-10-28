@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { runMigrations } from './db/migrate.js';
 import { seedDatabase } from './db/seed.js';
+import { query as dbQuery } from './db/index.js';
 
 let dbInitialized = false;
 
@@ -83,6 +84,22 @@ export async function handleApi(request, controllerFn, options = {}) {
 
     if (options.requireAdmin && (!user || user.role !== 'admin')) {
         return NextResponse.json({ success: false, error: 'Admin access privileges required' }, { status: 403 });
+    }
+
+    // Instantly reject any suspended user on all authenticated API endpoints
+    if (user && user.id) {
+        try {
+            const userCheck = await dbQuery('SELECT status FROM users WHERE id = $1', [user.id]);
+            if (userCheck.rows.length === 0 || userCheck.rows[0].status === 'suspended') {
+                return NextResponse.json({
+                    success: false,
+                    error: 'Your affiliate account has been suspended by administration.',
+                    suspended: true,
+                }, { status: 403 });
+            }
+        } catch (e) {
+            console.error('User status verification error in handleApi:', e);
+        }
     }
 
     const clientIp = headersObj['x-forwarded-for']?.split(',')[0]?.trim() || '127.0.0.1';
