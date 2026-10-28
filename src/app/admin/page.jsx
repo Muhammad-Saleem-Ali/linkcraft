@@ -127,7 +127,7 @@ export default function AdminPage() {
         };
     }, []);
     const handleUpdateStatus = async (userId, newStatus) => {
-        const res = await fetch(`/api/admin/users/${userId}/status`, {
+        const res = await authFetch(`/api/admin/users/${userId}/status`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: newStatus }),
@@ -139,7 +139,7 @@ export default function AdminPage() {
         loadAdminData();
     };
     const handleUpdateCommission = async (userId, newRate) => {
-        const res = await fetch(`/api/admin/users/${userId}/commission`, {
+        const res = await authFetch(`/api/admin/users/${userId}/commission`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ commissionRate: newRate }),
@@ -148,9 +148,10 @@ export default function AdminPage() {
         if (!data.success)
             throw new Error(data.error);
         setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, commissionRate: newRate } : u)));
+        loadAdminData();
     };
     const handleProcessPayout = async (payoutId, receiptTitle) => {
-        const res = await fetch(`/api/admin/payouts/${payoutId}/pay`, {
+        const res = await authFetch(`/api/admin/payouts/${payoutId}/pay`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ receiptTitle }),
