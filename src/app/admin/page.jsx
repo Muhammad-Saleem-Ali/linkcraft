@@ -174,7 +174,7 @@ export default function AdminPage() {
 
         {activeTab === 'users' && (<AdminUsersTab users={users} onUpdateStatus={handleUpdateStatus} onUpdateCommission={handleUpdateCommission} showToast={showToast}/>)}
 
-        {activeTab === 'reports' && (<AdminReportsTab reports={reports} showToast={showToast}/>)}
+        {activeTab === 'reports' && (<AdminReportsTab reports={reports} showToast={showToast} onRefresh={loadAdminData}/>)}
 
         {activeTab === 'payouts' && (<AdminPayoutsTab payouts={payouts} onProcessPayout={handleProcessPayout} showToast={showToast}/>)}
 

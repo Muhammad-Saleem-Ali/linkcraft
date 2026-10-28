@@ -1,7 +1,11 @@
 'use client';
-import React from 'react';
-import { Download, Calendar, Globe, TrendingUp } from 'lucide-react';
-export default function AdminReportsTab({ reports, showToast }) {
+import React, { useState } from 'react';
+import { Download, Calendar, Globe, TrendingUp, Upload } from 'lucide-react';
+import ImportAmazonCsvModal from './ImportAmazonCsvModal';
+
+export default function AdminReportsTab({ reports, showToast, onRefresh }) {
+    const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+
     if (!reports) {
         return (<div style={{ textAlign: 'center', padding: '4rem 1rem' }}>
         <div style={{ width: '40px', height: '40px', border: '3px solid #6366F1', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 1rem' }}/>
@@ -46,10 +50,34 @@ export default function AdminReportsTab({ reports, showToast }) {
           </p>
         </div>
 
-        <button onClick={handleExportCSV} className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.625rem 1.25rem' }}>
-          <Download size={16}/>
-          <span>Export CSV Report</span>
-        </button>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <button
+            onClick={() => setIsImportModalOpen(true)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.625rem 1.25rem',
+              backgroundColor: '#059669',
+              color: '#FFFFFF',
+              border: 'none',
+              borderRadius: '10px',
+              fontWeight: 700,
+              fontSize: '0.875rem',
+              cursor: 'pointer',
+              boxShadow: '0 2px 10px rgba(5, 150, 105, 0.3)',
+              transition: 'all 0.2s',
+            }}
+          >
+            <Upload size={16}/>
+            <span>Import Amazon Orders CSV</span>
+          </button>
+
+          <button onClick={handleExportCSV} className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.625rem 1.25rem' }}>
+            <Download size={16}/>
+            <span>Export CSV Report</span>
+          </button>
+        </div>
       </div>
 
       {/* 3 Summary Banners */}
@@ -277,5 +305,13 @@ export default function AdminReportsTab({ reports, showToast }) {
           </div>
         </div>
       </div>
+
+      {/* Import Amazon Associates CSV Modal */}
+      <ImportAmazonCsvModal
+        isOpen={isImportModalOpen}
+        onClose={() => setIsImportModalOpen(false)}
+        onRefresh={onRefresh}
+        showToast={showToast}
+      />
     </div>);
 }
