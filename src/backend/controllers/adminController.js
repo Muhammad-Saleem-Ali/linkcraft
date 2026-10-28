@@ -140,7 +140,7 @@ export async function getAllUsers(req, res) {
 }
 export async function updateUserStatus(req, res) {
     try {
-        const { id } = req.params;
+        const id = req.params.id || req.params.userId || req.body?.userId;
         const { status } = req.body;
         const validStatuses = ['active', 'pending', 'suspended'];
         if (!status || !validStatuses.includes(status)) {
@@ -163,7 +163,7 @@ export async function updateUserStatus(req, res) {
 }
 export async function updateUserCommission(req, res) {
     try {
-        const { id } = req.params;
+        const id = req.params.id || req.params.userId || req.body?.userId;
         const { commissionRate } = req.body;
         const rate = parseFloat(commissionRate);
         if (isNaN(rate) || rate < 0 || rate > 1) {
@@ -305,7 +305,7 @@ export async function getAllPayouts(req, res) {
 }
 export async function processPayout(req, res) {
     try {
-        const { id } = req.params;
+        const id = req.params.id || req.params.payoutId || req.body?.payoutId;
         const { receiptTitle } = req.body;
         const client = await query('SELECT * FROM payouts WHERE id = $1', [id]);
         if (client.rows.length === 0) {

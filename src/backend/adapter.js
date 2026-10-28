@@ -26,6 +26,10 @@ export async function handleApi(request, controllerFn, options = {}) {
     let params = {};
     if (options.context && options.context.params) {
         params = await options.context.params;
+        if (params.userId && !params.id) params.id = params.userId;
+        if (params.payoutId && !params.id) params.id = params.payoutId;
+        if (params.id && !params.userId) params.userId = params.id;
+        if (params.id && !params.payoutId) params.payoutId = params.id;
     }
 
     const headersObj = {};
