@@ -35,6 +35,10 @@ export default function DashboardPage() {
 
         const cachedUser = getCurrentUser();
         if (cachedUser) {
+            if (cachedUser.role === 'admin') {
+                router.replace('/admin');
+                return;
+            }
             setCurrentUser(cachedUser);
             setIsLoadingAuth(false);
         }
@@ -50,6 +54,10 @@ export default function DashboardPage() {
             })
             .then((data) => {
                 if (data && data.success && data.user) {
+                    if (data.user.role === 'admin') {
+                        router.replace('/admin');
+                        return;
+                    }
                     setCurrentUser(data.user);
                     if (typeof window !== 'undefined') {
                         localStorage.setItem('linkcraft_user', JSON.stringify(data.user));

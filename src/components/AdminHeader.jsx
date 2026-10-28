@@ -1,11 +1,9 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { logout } from '../utils/auth.js';
 import { ShieldCheck, LayoutDashboard, Users, FileBarChart, CreditCard, Link2, LogOut, ChevronDown, RefreshCw, ExternalLink } from 'lucide-react';
 export default function AdminHeader({ activeTab, setActiveTab, onRefresh, pendingApprovals = 0, pendingPayouts = 0, }) {
-    const router = useRouter();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const dropdownRef = useRef(null);
     const tabs = [
@@ -96,25 +94,6 @@ export default function AdminHeader({ activeTab, setActiveTab, onRefresh, pendin
               <span>Refresh</span>
             </button>)}
 
-          {/* Switch to User Dashboard View */}
-          <Link href="/dashboard" style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.45rem',
-            backgroundColor: '#06B6D4',
-            color: '#FFFFFF',
-            padding: '0.45rem 1rem',
-            borderRadius: '99px',
-            fontSize: '0.8125rem',
-            fontWeight: 800,
-            textDecoration: 'none',
-            boxShadow: '0 2px 10px rgba(6, 182, 212, 0.35)',
-            transition: 'all 0.2s',
-        }}>
-            <LayoutDashboard size={15}/>
-            <span>User Dashboard</span>
-          </Link>
-
           {/* Admin User Trigger */}
           <div onClick={() => setIsMenuOpen(!isMenuOpen)} style={{
             display: 'flex',
@@ -160,30 +139,6 @@ export default function AdminHeader({ activeTab, setActiveTab, onRefresh, pendin
                 <span style={{ fontSize: '0.75rem', color: '#64748B', display: 'block' }}>Signed in as Superadmin</span>
                 <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>admin@ilearner.dev</span>
               </div>
-
-              <button onClick={() => {
-                setIsMenuOpen(false);
-                router.push('/dashboard');
-            }} style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                padding: '0.625rem 0.875rem',
-                borderRadius: '10px',
-                border: 'none',
-                backgroundColor: 'transparent',
-                color: '#0F172A',
-                fontWeight: 700,
-                fontSize: '0.875rem',
-                cursor: 'pointer',
-                textAlign: 'left',
-            }} onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#F1F5F9')} onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}>
-                <LayoutDashboard size={18} color="#06B6D4"/>
-                <span>Switch to User Dashboard</span>
-              </button>
-
-              <div style={{ height: '1px', backgroundColor: '#F1F5F9', margin: '0.375rem 0' }}/>
 
               <button onClick={() => {
                 setIsMenuOpen(false);
