@@ -1,7 +1,13 @@
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
 dotenv.config();
-const poolConfig = process.env.DATABASE_URL
+const hasDbUrl = Boolean(process.env.DATABASE_URL);
+
+if (!hasDbUrl && process.env.NODE_ENV === 'production') {
+    console.warn('⚠️ WARNING: DATABASE_URL environment variable is not defined! Please configure your PostgreSQL connection string in Vercel Project Settings.');
+}
+
+const poolConfig = hasDbUrl
   ? {
       connectionString: process.env.DATABASE_URL,
       ssl: process.env.DATABASE_URL.includes('localhost') || process.env.DATABASE_URL.includes('127.0.0.1')
