@@ -366,7 +366,7 @@ export default function OverviewSection({ showToast }) {
               </button>
             </div>
 
-            {/* Box 2: Direct Amazon Link */}
+            {/* Box 2: Direct Referral Link (Tracked) */}
             <div style={{
               backgroundColor: '#FFFFFF',
               border: '1px solid #E2E8F0',
@@ -379,7 +379,7 @@ export default function OverviewSection({ showToast }) {
             }}>
               <div style={{ minWidth: 0, flex: 1 }}>
                 <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748B', display: 'block', marginBottom: '0.25rem' }}>
-                  Direct Amazon Link
+                  Direct Referral Link (Tracked)
                 </span>
                 <div style={{
                   fontFamily: 'monospace',
@@ -390,13 +390,13 @@ export default function OverviewSection({ showToast }) {
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap'
                 }}>
-                  {latestCreatedLink.affiliateUrl || latestCreatedLink.destinationUrl}
+                  {`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3002'}/r/${latestCreatedLink.shortSlug || latestCreatedLink.id}`}
                 </div>
               </div>
 
               <button
                 type="button"
-                onClick={() => copyText(latestCreatedLink.affiliateUrl || latestCreatedLink.destinationUrl, 'direct')}
+                onClick={() => copyText(`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3002'}/r/${latestCreatedLink.shortSlug || latestCreatedLink.id}`, 'direct')}
                 style={{
                   backgroundColor: '#0F172A',
                   color: '#FFFFFF',

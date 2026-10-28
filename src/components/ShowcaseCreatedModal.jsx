@@ -35,7 +35,6 @@ export default function ShowcaseCreatedModal({ isOpen, onClose, link, showToast 
 
     const showcaseUrl = getFullUrl(link.showcaseUrl || `/p/${link.shortSlug || link.id}`);
     const trackingUrl = getFullUrl(link.shortUrl || `/r/${link.shortSlug || link.id}`);
-    const directAmazonUrl = link.affiliateUrl || link.destinationUrl || '';
 
     const handleCopy = (text, type, label) => {
         if (!text) return;
@@ -244,9 +243,9 @@ export default function ShowcaseCreatedModal({ isOpen, onClose, link, showToast 
                 </div>
 
                 {/* 2. Direct Amazon Referral Tracking Link */}
-                <div style={{ marginBottom: '1rem' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
                     <label style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '0.375rem' }}>
-                        2. Direct Amazon Referral Tracking Link
+                        2. Direct Referral Link (Tracked)
                     </label>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <input
@@ -292,72 +291,6 @@ export default function ShowcaseCreatedModal({ isOpen, onClose, link, showToast 
                         </button>
                     </div>
                 </div>
-
-                {/* 3. Direct Amazon URL (with Partner Attribution) */}
-                {directAmazonUrl && (
-                    <div style={{ marginBottom: '1.5rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.375rem' }}>
-                            <label style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#334155' }}>
-                                3. Direct Amazon URL (with Your Partner Attribution)
-                            </label>
-                            <span
-                                style={{
-                                    fontSize: '0.6875rem',
-                                    color: '#10B981',
-                                    fontWeight: 700,
-                                    backgroundColor: '#ECFDF5',
-                                    padding: '0.15rem 0.5rem',
-                                    borderRadius: '6px',
-                                    border: '1px solid #A7F3D0',
-                                }}
-                            >
-                                Amazon Canonical
-                            </span>
-                        </div>
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                            <input
-                                type="text"
-                                readOnly
-                                value={directAmazonUrl}
-                                className="input-field"
-                                style={{
-                                    fontFamily: 'monospace',
-                                    fontSize: '0.8125rem',
-                                    color: '#B45309',
-                                    backgroundColor: '#FFFBEB',
-                                    borderColor: '#FDE68A',
-                                    borderRadius: '10px',
-                                    padding: '0.625rem 0.875rem',
-                                    flex: 1,
-                                }}
-                            />
-                            <button
-                                type="button"
-                                onClick={() => handleCopy(directAmazonUrl, 'amazon_direct', 'Direct Amazon link')}
-                                style={{
-                                    padding: '0.625rem 1.125rem',
-                                    borderRadius: '10px',
-                                    backgroundColor: copiedType === 'amazon_direct' ? '#10B981' : '#FEF3C7',
-                                    color: copiedType === 'amazon_direct' ? '#FFFFFF' : '#B45309',
-                                    border: '1px solid #FDE68A',
-                                    fontWeight: 700,
-                                    fontSize: '0.875rem',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.375rem',
-                                    flexShrink: 0,
-                                    minWidth: '85px',
-                                    justifyContent: 'center',
-                                    transition: 'all 0.2s',
-                                }}
-                            >
-                                {copiedType === 'amazon_direct' ? <Check size={16} strokeWidth={3} /> : <Copy size={16} />}
-                                <span>{copiedType === 'amazon_direct' ? 'Copied' : 'Copy'}</span>
-                            </button>
-                        </div>
-                    </div>
-                )}
 
                 {/* Bottom Action Grid */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
