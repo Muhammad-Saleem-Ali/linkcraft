@@ -1,6 +1,5 @@
 import { Pool } from 'pg';
-import dotenv from 'dotenv';
-dotenv.config();
+
 const hasDbUrl = Boolean(process.env.DATABASE_URL);
 
 if (!hasDbUrl && process.env.NODE_ENV === 'production') {
