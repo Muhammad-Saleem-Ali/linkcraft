@@ -145,7 +145,7 @@ export async function fetchProductFromCreatorsApi(asin, domain = 'www.amazon.com
       asin,
       title,
       domain,
-      affiliateUrl: `https://${domain}/dp/${asnin}?tag=${partnerTag}`,
+      affiliateUrl: `https://${domain}/dp/${asin}?tag=${partnerTag}`,
       imageUrl,
       price: price || '$29.99',
       rating,
