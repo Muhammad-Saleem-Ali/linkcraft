@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import { query } from '../db/index.js';
 import { realtimeHub } from '../utils/realtime.js';
 export async function getAdminOverview(req, res) {
@@ -501,6 +502,85 @@ export async function importAmazonOrders(req, res) {
     }
     catch (err) {
         console.error('importAmazonOrders error:', err);
+        return res.status(500).json({ success: false, error: err.message });
+    }
+}
+
+/**
+ * Admin: Create a new affiliate partner user account
+ */
+export async function createUserByAdmin(req, res) {
+    try {
+        const { name, email, password, commissionRate, status, phone } = req.body;
+        if (!name || !name.trim()) {
+            return res.status(400).json({ success: false, error: 'Full name is required' });
+        }
+        if (!email || !email.trim()) {
+            return res.status(400).json({ success: false, error: 'Email address is required' });
+        }
+        if (!password || password.length < 6) {
+            return res.status(400).json({ success: false, error: 'Password is required and must be at least 6 characters' });
+        }
+
+        const cleanEmail = email.trim().toLowerCase();
+        // Check for existing account
+        const existing = await query('SELECT id FROM users WHERE LOWER(email) = $1', [cleanEmail]);
+        if (existing.rows.length > 0) {
+            return res.status(400).json({ success: false, error: 'An account with this email address already exists' });
+        }
+
+        const passwordHash = await bcrypt.hash(password, 10);
+        const userId = `usr_${Date.now()}`;
+        const baseSlug = name.trim().toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 20) || 'partner';
+        let storeSlug = baseSlug;
+        let counter = 1;
+        while (true) {
+            const slugCheck = await query('SELECT id FROM users WHERE store_slug = $1', [storeSlug]);
+            if (slugCheck.rows.length === 0) break;
+            storeSlug = `${baseSlug}${counter}`;
+            counter++;
+        }
+
+        const userStatus = status === 'pending' ? 'pending' : 'active';
+        const parsedCommission = commissionRate !== undefined && !isNaN(parseFloat(commissionRate))
+            ? (parseFloat(commissionRate) > 1 ? parseFloat(commissionRate) / 100 : parseFloat(commissionRate))
+            : 0.70;
+
+        const result = await query(`
+            INSERT INTO users (
+                id, name, email, password_hash, phone, role, status, commission_rate,
+                currently_owed, lifetime_earnings, total_paid_out, store_slug, is_page_live,
+                created_at, updated_at
+            ) VALUES ($1, $2, $3, $4, $5, 'partner', $6, $7, 0, 0, 0, $8, true, NOW(), NOW())
+            RETURNING id, name, email, phone, role, status, commission_rate, currently_owed,
+                      lifetime_earnings, total_paid_out, store_slug, is_page_live, created_at
+        `, [userId, name.trim(), cleanEmail, passwordHash, phone || '', userStatus, parsedCommission, storeSlug]);
+
+        const newUser = result.rows[0];
+
+        return res.status(201).json({
+            success: true,
+            message: 'User account created successfully',
+            user: {
+                id: newUser.id,
+                name: newUser.name,
+                email: newUser.email,
+                phone: newUser.phone,
+                role: newUser.role,
+                status: newUser.status,
+                commissionRate: parseFloat(newUser.commission_rate),
+                currentlyOwed: parseFloat(newUser.currently_owed),
+                lifetimeEarnings: parseFloat(newUser.lifetime_earnings),
+                totalPaidOut: parseFloat(newUser.total_paid_out),
+                storeSlug: newUser.store_slug,
+                isPageLive: newUser.is_page_live,
+                createdAt: newUser.created_at,
+                linksCount: 0,
+                clicksCount: 0,
+            }
+        });
+    } catch (err) {
+        console.error('createUserByAdmin error:', err);
         return res.status(500).json({ success: false, error: err.message });
     }
 }

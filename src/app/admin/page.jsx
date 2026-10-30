@@ -150,6 +150,20 @@ export default function AdminPage() {
         setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, commissionRate: newRate } : u)));
         loadAdminData();
     };
+    const handleCreateUser = async (userData) => {
+        const res = await authFetch('/api/admin/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData),
+        });
+        const data = await res.json();
+        if (!data.success) {
+            throw new Error(data.error || 'Failed to create user');
+        }
+        setUsers((prev) => [data.user, ...prev]);
+        loadAdminData();
+        return data.user;
+    };
     const handleProcessPayout = async (payoutId, receiptTitle) => {
         const res = await authFetch(`/api/admin/payouts/${payoutId}/pay`, {
             method: 'POST',
@@ -173,7 +187,7 @@ export default function AdminPage() {
       <main style={{ maxWidth: '1180px', margin: '0 auto', padding: '2rem 1.25rem' }}>
         {activeTab === 'overview' && (<AdminOverviewTab metrics={metrics} topPartners={topPartners} onNavigateTab={setActiveTab} showToast={showToast}/>)}
 
-        {activeTab === 'users' && (<AdminUsersTab users={users} onUpdateStatus={handleUpdateStatus} onUpdateCommission={handleUpdateCommission} showToast={showToast}/>)}
+        {activeTab === 'users' && (<AdminUsersTab users={users} onUpdateStatus={handleUpdateStatus} onUpdateCommission={handleUpdateCommission} onCreateUser={handleCreateUser} showToast={showToast}/>)}
 
         {activeTab === 'reports' && (<AdminReportsTab reports={reports} showToast={showToast} onRefresh={loadAdminData}/>)}
 

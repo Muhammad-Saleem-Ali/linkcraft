@@ -331,39 +331,77 @@ export default function OverviewSection({ showToast }) {
                 <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748B', display: 'block', marginBottom: '0.25rem' }}>
                   Public Page
                 </span>
-                <div style={{
-                  fontFamily: 'monospace',
-                  fontSize: '0.9375rem',
-                  fontWeight: 700,
-                  color: '#6366F1',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                }}>
-                  {`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3002'}/p/${latestCreatedLink.shortSlug || latestCreatedLink.id}`}
-                </div>
+                <a
+                  href={`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3002'}/p/${latestCreatedLink.shortSlug || latestCreatedLink.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.375rem',
+                    fontFamily: 'monospace',
+                    fontSize: '0.9375rem',
+                    fontWeight: 700,
+                    color: '#6366F1',
+                    textDecoration: 'none',
+                    maxWidth: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  }}
+                  title="Click to open public showcase page in new tab"
+                >
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3002'}/p/${latestCreatedLink.shortSlug || latestCreatedLink.id}`}
+                  </span>
+                  <ExternalLink size={13} style={{ flexShrink: 0 }} />
+                </a>
               </div>
 
-              <button
-                type="button"
-                onClick={() => copyText(`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3002'}/p/${latestCreatedLink.shortSlug || latestCreatedLink.id}`, 'public')}
-                style={{
-                  backgroundColor: '#0F172A',
-                  color: '#FFFFFF',
-                  border: 'none',
-                  borderRadius: '8px',
-                  padding: '0.5rem 1.25rem',
-                  fontWeight: 700,
-                  fontSize: '0.8125rem',
-                  cursor: 'pointer',
-                  flexShrink: 0,
-                  minWidth: '72px',
-                  textAlign: 'center',
-                  transition: 'opacity 0.2s',
-                }}
-              >
-                {copiedId === 'public' ? 'Copied' : 'Copy'}
-              </button>
+              <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
+                <button
+                  type="button"
+                  onClick={() => copyText(`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3002'}/p/${latestCreatedLink.shortSlug || latestCreatedLink.id}`, 'public')}
+                  style={{
+                    backgroundColor: '#0F172A',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.5rem 1rem',
+                    fontWeight: 700,
+                    fontSize: '0.8125rem',
+                    cursor: 'pointer',
+                    minWidth: '68px',
+                    textAlign: 'center',
+                    transition: 'opacity 0.2s',
+                  }}
+                >
+                  {copiedId === 'public' ? 'Copied' : 'Copy'}
+                </button>
+
+                <a
+                  href={`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3002'}/p/${latestCreatedLink.shortSlug || latestCreatedLink.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    backgroundColor: '#EEF2FF',
+                    color: '#4F46E5',
+                    border: '1px solid #C7D2FE',
+                    borderRadius: '8px',
+                    padding: '0.5rem 0.875rem',
+                    fontWeight: 700,
+                    fontSize: '0.8125rem',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.25rem',
+                  }}
+                  title="Open public showcase in new tab"
+                >
+                  <span>Open</span>
+                  <ExternalLink size={13} />
+                </a>
+              </div>
             </div>
 
             {/* Box 2: Direct Referral Link (Tracked) */}
@@ -381,39 +419,77 @@ export default function OverviewSection({ showToast }) {
                 <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748B', display: 'block', marginBottom: '0.25rem' }}>
                   Direct Referral Link (Tracked)
                 </span>
-                <div style={{
-                  fontFamily: 'monospace',
-                  fontSize: '0.8438rem',
-                  fontWeight: 600,
-                  color: '#475569',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                }}>
-                  {`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3002'}/r/${latestCreatedLink.shortSlug || latestCreatedLink.id}`}
-                </div>
+                <a
+                  href={`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3002'}/r/${latestCreatedLink.shortSlug || latestCreatedLink.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.375rem',
+                    fontFamily: 'monospace',
+                    fontSize: '0.8438rem',
+                    fontWeight: 600,
+                    color: '#475569',
+                    textDecoration: 'none',
+                    maxWidth: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  }}
+                  title="Click to open direct tracking link in new tab"
+                >
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3002'}/r/${latestCreatedLink.shortSlug || latestCreatedLink.id}`}
+                  </span>
+                  <ExternalLink size={13} style={{ flexShrink: 0 }} />
+                </a>
               </div>
 
-              <button
-                type="button"
-                onClick={() => copyText(`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3002'}/r/${latestCreatedLink.shortSlug || latestCreatedLink.id}`, 'direct')}
-                style={{
-                  backgroundColor: '#0F172A',
-                  color: '#FFFFFF',
-                  border: 'none',
-                  borderRadius: '8px',
-                  padding: '0.5rem 1.25rem',
-                  fontWeight: 700,
-                  fontSize: '0.8125rem',
-                  cursor: 'pointer',
-                  flexShrink: 0,
-                  minWidth: '72px',
-                  textAlign: 'center',
-                  transition: 'opacity 0.2s',
-                }}
-              >
-                {copiedId === 'direct' ? 'Copied' : 'Copy'}
-              </button>
+              <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
+                <button
+                  type="button"
+                  onClick={() => copyText(`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3002'}/r/${latestCreatedLink.shortSlug || latestCreatedLink.id}`, 'direct')}
+                  style={{
+                    backgroundColor: '#0F172A',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.5rem 1rem',
+                    fontWeight: 700,
+                    fontSize: '0.8125rem',
+                    cursor: 'pointer',
+                    minWidth: '68px',
+                    textAlign: 'center',
+                    transition: 'opacity 0.2s',
+                  }}
+                >
+                  {copiedId === 'direct' ? 'Copied' : 'Copy'}
+                </button>
+
+                <a
+                  href={`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3002'}/r/${latestCreatedLink.shortSlug || latestCreatedLink.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    backgroundColor: '#F1F5F9',
+                    color: '#334155',
+                    border: '1px solid #CBD5E1',
+                    borderRadius: '8px',
+                    padding: '0.5rem 0.875rem',
+                    fontWeight: 700,
+                    fontSize: '0.8125rem',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.25rem',
+                  }}
+                  title="Open direct tracking link in new tab"
+                >
+                  <span>Open</span>
+                  <ExternalLink size={13} />
+                </a>
+              </div>
             </div>
           </div>
         )}
@@ -954,7 +1030,17 @@ export default function OverviewSection({ showToast }) {
                     <td style={{ padding: '0.875rem 0.5rem', fontWeight: 600, color: '#1E1B4B' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
                         <span>{row.country || '🇺🇸'}</span>
-                        <span>{row.name || row.title}</span>
+                        <a
+                          href={`/r/${row.shortSlug || row.id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: '#1E1B4B', textDecoration: 'none' }}
+                          onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
+                          onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
+                          title="Open affiliate tracking link in new tab"
+                        >
+                          {row.name || row.title}
+                        </a>
                       </div>
                     </td>
                     <td style={{ padding: '0.875rem 0.5rem', color: '#6B7280' }}>
@@ -985,6 +1071,24 @@ export default function OverviewSection({ showToast }) {
                           {copiedId === (row.shortSlug || row.id) ? 'Copied' : 'Copy'}
                         </button>
 
+                        <a href={`/r/${row.shortSlug || row.id}`} target="_blank" rel="noopener noreferrer" style={{
+                padding: '0.25rem 0.625rem',
+                borderRadius: '6px',
+                border: '1px solid #C7D2FE',
+                backgroundColor: '#EEF2FF',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                color: '#4F46E5',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.25rem',
+                cursor: 'pointer',
+                textDecoration: 'none',
+            }} title="Open direct tracking link in new tab">
+                          <ExternalLink size={12}/>
+                          Open
+                        </a>
+
                         <a href={`/p/${row.shortSlug || row.id}`} target="_blank" rel="noopener noreferrer" style={{
                 padding: '0.25rem 0.625rem',
                 borderRadius: '6px',
@@ -998,7 +1102,7 @@ export default function OverviewSection({ showToast }) {
                 gap: '0.25rem',
                 cursor: 'pointer',
                 textDecoration: 'none',
-            }}>
+            }} title="View public showcase page">
                           <ExternalLink size={12}/>
                           View
                         </a>

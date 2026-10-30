@@ -193,10 +193,29 @@ export default function ShowcaseCreatedModal({ isOpen, onClose, link, showToast 
                 </div>
 
                 {/* 1. Shareable Hosted Showcase Web Page */}
-                <div style={{ marginBottom: '1rem' }}>
-                    <label style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '0.375rem' }}>
-                        1. Shareable Hosted Showcase Web Page
-                    </label>
+                <div style={{ marginBottom: '1.125rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.375rem' }}>
+                        <label style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#334155' }}>
+                            1. Shareable Hosted Showcase Web Page
+                        </label>
+                        <a
+                            href={showcaseUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                fontSize: '0.75rem',
+                                color: '#0891B2',
+                                fontWeight: 700,
+                                textDecoration: 'none',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.25rem',
+                            }}
+                        >
+                            <span>Open in new tab</span>
+                            <ExternalLink size={12} />
+                        </a>
+                    </div>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <input
                             type="text"
@@ -219,34 +238,79 @@ export default function ShowcaseCreatedModal({ isOpen, onClose, link, showToast 
                             type="button"
                             onClick={() => handleCopy(showcaseUrl, 'showcase', 'Showcase URL')}
                             style={{
-                                padding: '0.625rem 1.125rem',
+                                padding: '0.625rem 0.875rem',
                                 borderRadius: '10px',
                                 backgroundColor: copiedType === 'showcase' ? '#10B981' : '#06B6D4',
                                 color: '#FFFFFF',
                                 border: 'none',
                                 fontWeight: 700,
-                                fontSize: '0.875rem',
+                                fontSize: '0.8125rem',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '0.375rem',
                                 flexShrink: 0,
-                                minWidth: '85px',
+                                minWidth: '78px',
                                 justifyContent: 'center',
                                 transition: 'all 0.2s',
                             }}
+                            title="Copy Showcase URL"
                         >
-                            {copiedType === 'showcase' ? <Check size={16} strokeWidth={3} /> : <Copy size={16} />}
+                            {copiedType === 'showcase' ? <Check size={15} strokeWidth={3} /> : <Copy size={15} />}
                             <span>{copiedType === 'showcase' ? 'Copied' : 'Copy'}</span>
                         </button>
+                        <a
+                            href={showcaseUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                padding: '0.625rem 0.875rem',
+                                borderRadius: '10px',
+                                backgroundColor: '#ECFEFF',
+                                color: '#0891B2',
+                                border: '1px solid #CFFAFE',
+                                fontWeight: 700,
+                                fontSize: '0.8125rem',
+                                textDecoration: 'none',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.375rem',
+                                flexShrink: 0,
+                                justifyContent: 'center',
+                                transition: 'all 0.2s',
+                            }}
+                            title="Open Showcase in new tab"
+                        >
+                            <ExternalLink size={15} />
+                            <span>Open</span>
+                        </a>
                     </div>
                 </div>
 
                 {/* 2. Direct Amazon Referral Tracking Link */}
                 <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '0.375rem' }}>
-                        2. Direct Referral Link (Tracked)
-                    </label>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.375rem' }}>
+                        <label style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#334155' }}>
+                            2. Direct Referral Link (Tracked Amazon Link)
+                        </label>
+                        <a
+                            href={trackingUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                fontSize: '0.75rem',
+                                color: '#4F46E5',
+                                fontWeight: 700,
+                                textDecoration: 'none',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.25rem',
+                            }}
+                        >
+                            <span>Open in new tab</span>
+                            <ExternalLink size={12} />
+                        </a>
+                    </div>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <input
                             type="text"
@@ -269,26 +333,52 @@ export default function ShowcaseCreatedModal({ isOpen, onClose, link, showToast 
                             type="button"
                             onClick={() => handleCopy(trackingUrl, 'tracking', 'Tracking URL')}
                             style={{
-                                padding: '0.625rem 1.125rem',
+                                padding: '0.625rem 0.875rem',
                                 borderRadius: '10px',
                                 backgroundColor: copiedType === 'tracking' ? '#10B981' : '#0F172A',
                                 color: '#FFFFFF',
                                 border: 'none',
                                 fontWeight: 700,
-                                fontSize: '0.875rem',
+                                fontSize: '0.8125rem',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '0.375rem',
                                 flexShrink: 0,
-                                minWidth: '85px',
+                                minWidth: '78px',
                                 justifyContent: 'center',
                                 transition: 'all 0.2s',
                             }}
+                            title="Copy Tracking Link"
                         >
-                            {copiedType === 'tracking' ? <Check size={16} strokeWidth={3} /> : <Copy size={16} />}
+                            {copiedType === 'tracking' ? <Check size={15} strokeWidth={3} /> : <Copy size={15} />}
                             <span>{copiedType === 'tracking' ? 'Copied' : 'Copy'}</span>
                         </button>
+                        <a
+                            href={trackingUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                padding: '0.625rem 0.875rem',
+                                borderRadius: '10px',
+                                backgroundColor: '#EEF2FF',
+                                color: '#4F46E5',
+                                border: '1px solid #C7D2FE',
+                                fontWeight: 700,
+                                fontSize: '0.8125rem',
+                                textDecoration: 'none',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.375rem',
+                                flexShrink: 0,
+                                justifyContent: 'center',
+                                transition: 'all 0.2s',
+                            }}
+                            title="Open Tracking Link in new tab"
+                        >
+                            <ExternalLink size={15} />
+                            <span>Open</span>
+                        </a>
                     </div>
                 </div>
 

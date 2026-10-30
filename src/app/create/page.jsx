@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Toast from '@/components/Toast';
 import ShowcaseCreatedModal from '@/components/ShowcaseCreatedModal';
-import { MessageCircle, ArrowRight, Copy, Sparkles, Eye, X, Zap, Search, HelpCircle } from 'lucide-react';
-import { getAuthToken, authFetch, logout } from '@/utils/auth';
+import { MessageCircle, ArrowRight, Copy, Sparkles, Eye, X, Zap, Search, HelpCircle, ExternalLink } from 'lucide-react';
+import { getAuthToken, getCurrentUser, authFetch, logout } from '@/utils/auth';
 
 export default function CreateAffiliateLinkPage() {
     const router = useRouter();
@@ -479,9 +479,27 @@ export default function CreateAffiliateLinkPage() {
                             {link.country || '🇺🇸'}
                           </div>)}
                         <div>
-                          <div style={{ fontWeight: 700, color: '#0F172A', maxWidth: '420px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          <a
+                            href={getFullUrl(link.shortUrl || `/r/${link.shortSlug}`)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              fontWeight: 700,
+                              color: '#0F172A',
+                              maxWidth: '420px',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              display: 'block',
+                              textDecoration: 'none',
+                              transition: 'color 0.2s',
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.color = '#06B6D4')}
+                            onMouseLeave={(e) => (e.currentTarget.style.color = '#0F172A')}
+                            title="Open tracking link in new tab"
+                          >
                             {link.name}
-                          </div>
+                          </a>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: '#64748B', marginTop: '0.125rem' }}>
                             <span>{link.country || '🇺🇸'}</span>
                             <span>•</span>
@@ -498,6 +516,30 @@ export default function CreateAffiliateLinkPage() {
                     </td>
                     <td style={{ padding: '0.875rem 0.5rem', textAlign: 'right' }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.5rem' }}>
+                        {/* Open Direct Tracking Link */}
+                        <a
+                          href={getFullUrl(link.shortUrl || `/r/${link.shortSlug}`)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            padding: '0.3125rem 0.625rem',
+                            borderRadius: '8px',
+                            backgroundColor: '#F0FDF4',
+                            color: '#16A34A',
+                            border: '1px solid #BBF7D0',
+                            fontWeight: 700,
+                            fontSize: '0.75rem',
+                            textDecoration: 'none',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                          }}
+                          title="Open tracking link in new tab"
+                        >
+                          <ExternalLink size={13} />
+                          <span>Open</span>
+                        </a>
+
                         {/* View Web Showcase Page */}
                         <Link href={link.showcaseUrl || `/p/${link.shortSlug}`} target="_blank" style={{
                 padding: '0.3125rem 0.625rem',

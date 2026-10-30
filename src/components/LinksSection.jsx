@@ -94,18 +94,40 @@ export default function LinksSection({ showToast, onOpenCreateLinkModal }) {
               <span style={{ fontSize: '0.9375rem', fontWeight: 700 }}>Your Global Affiliate Storefront</span>
               <span className="badge badge-success">Active</span>
             </div>
-            <span style={{
-            fontSize: '0.9375rem',
-            fontFamily: 'monospace',
-            fontWeight: 600,
-            color: 'var(--brand-accent)',
-        }}>
-              {globalStoreUrl}
-            </span>
+            <a
+              href={globalStoreUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: '0.9375rem',
+                fontFamily: 'monospace',
+                fontWeight: 600,
+                color: 'var(--brand-accent)',
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.375rem',
+              }}
+              title="Open storefront in new tab"
+            >
+              <span>{globalStoreUrl}</span>
+              <ExternalLink size={13} />
+            </a>
           </div>
         </div>
 
         <div style={{ display: 'flex', gap: '0.625rem' }}>
+          <a
+            href={globalStoreUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-secondary btn-sm"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', textDecoration: 'none' }}
+            title="Open storefront in new tab"
+          >
+            <ExternalLink size={16} />
+            <span>Open</span>
+          </a>
           <button onClick={() => handleCopyLink(globalStoreUrl, 'global')} className="btn btn-primary btn-sm">
             {copiedId === 'global' ? <Check size={16}/> : <Copy size={16}/>}
             {copiedId === 'global' ? 'Copied!' : 'Copy Storefront Link'}
@@ -160,12 +182,39 @@ export default function LinksSection({ showToast, onOpenCreateLinkModal }) {
                 const estEarnings = (link.clicks * 42.5).toFixed(0);
                 return (<tr key={link.id} style={{ borderBottom: '1px solid var(--brand-border-subtle)', transition: 'background-color 0.15s' }}>
                       <td style={{ padding: '1rem 1.5rem' }}>
-                        <div style={{ fontWeight: 700, color: 'var(--brand-text)', marginBottom: '0.25rem' }}>
+                        <a
+                          href={linkUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            fontWeight: 700,
+                            color: 'var(--brand-text)',
+                            marginBottom: '0.25rem',
+                            display: 'block',
+                            textDecoration: 'none',
+                          }}
+                          title="Open tracking link in new tab"
+                        >
                           {link.name}
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontFamily: 'monospace', fontSize: '0.8125rem', color: 'var(--brand-accent)' }}>
+                        </a>
+                        <a
+                          href={linkUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.375rem',
+                            fontFamily: 'monospace',
+                            fontSize: '0.8125rem',
+                            color: 'var(--brand-accent)',
+                            textDecoration: 'none',
+                          }}
+                          title="Open tracking link in new tab"
+                        >
                           <span>{linkUrl}</span>
-                        </div>
+                          <ExternalLink size={12} />
+                        </a>
                       </td>
                       <td style={{ padding: '1rem 1rem', color: 'var(--brand-text-muted)', fontSize: '0.8125rem', maxWidth: '240px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         <a href={link.destinationUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#64748B', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -184,6 +233,9 @@ export default function LinksSection({ showToast, onOpenCreateLinkModal }) {
                       </td>
                       <td style={{ padding: '1rem 1.5rem', textAlign: 'right' }}>
                         <div style={{ display: 'inline-flex', gap: '0.375rem' }}>
+                          <a href={linkUrl} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm" style={{ padding: '0.375rem', borderRadius: '8px', display: 'flex', alignItems: 'center' }} title="Open Tracking Link in New Tab">
+                            <ExternalLink size={16} color="var(--brand-accent)" />
+                          </a>
                           <button onClick={() => handleCopyLink(linkUrl, link.id)} className="btn btn-secondary btn-sm" style={{ padding: '0.375rem', borderRadius: '8px' }} title="Copy Link">
                             {copiedId === link.id ? <Check size={16} color="var(--brand-success)"/> : <Copy size={16}/>}
                           </button>

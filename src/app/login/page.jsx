@@ -206,16 +206,14 @@ export default function LoginPage() {
           </div>
 
           <h1 style={{ fontSize: '1.875rem', fontWeight: 800, color: '#0F172A', letterSpacing: '-0.02em', marginBottom: '0.25rem' }}>
-            {mode === 'signin' ? 'Welcome back' : 'Create an Account'}
+            Welcome back
           </h1>
           <p style={{ fontSize: '0.9375rem', color: '#64748B' }}>
-            {mode === 'signin'
-            ? 'Sign in to your Amazon Associate account'
-            : 'Register as an affiliate partner to start earning commissions'}
+            Sign in to your Amazon Associate account
           </p>
         </div>
 
-        {/* Login / Register Card */}
+        {/* Login Card */}
         <div className="ilearner-card animate-fade-in" style={{
             width: '100%',
             maxWidth: '460px',
@@ -225,53 +223,6 @@ export default function LoginPage() {
             boxShadow: '0 10px 30px rgba(15, 23, 42, 0.08)',
             border: '1px solid #E2E8F0',
         }}>
-          {/* Segmented Mode Pill Tab */}
-          <div style={{
-            display: 'flex',
-            backgroundColor: '#F1F5F9',
-            borderRadius: '12px',
-            padding: '0.25rem',
-            marginBottom: '1.5rem',
-        }}>
-            <button type="button" onClick={() => {
-            setMode('signin');
-            setErrorMessage(null);
-            setSuccessMessage(null);
-        }} style={{
-            flex: 1,
-            padding: '0.625rem 0',
-            borderRadius: '10px',
-            border: 'none',
-            backgroundColor: mode === 'signin' ? '#FFFFFF' : 'transparent',
-            color: mode === 'signin' ? '#0F172A' : '#64748B',
-            fontWeight: 700,
-            fontSize: '0.875rem',
-            cursor: 'pointer',
-            boxShadow: mode === 'signin' ? '0 2px 6px rgba(0, 0, 0, 0.06)' : 'none',
-            transition: 'all 0.2s',
-        }}>
-              Sign In
-            </button>
-            <button type="button" onClick={() => {
-            setMode('register');
-            setErrorMessage(null);
-            setSuccessMessage(null);
-        }} style={{
-            flex: 1,
-            padding: '0.625rem 0',
-            borderRadius: '10px',
-            border: 'none',
-            backgroundColor: mode === 'register' ? '#FFFFFF' : 'transparent',
-            color: mode === 'register' ? '#0F172A' : '#64748B',
-            fontWeight: 700,
-            fontSize: '0.875rem',
-            cursor: 'pointer',
-            boxShadow: mode === 'register' ? '0 2px 6px rgba(0, 0, 0, 0.06)' : 'none',
-            transition: 'all 0.2s',
-        }}>
-              Create Account
-            </button>
-          </div>
 
           {/* Error Message Alert */}
           {errorMessage && (<div style={{
@@ -310,14 +261,6 @@ export default function LoginPage() {
             </div>)}
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            {/* Name Field (Register Mode Only) */}
-            {mode === 'register' && (<div className="input-group" style={{ marginBottom: 0 }}>
-                <label className="input-label" style={{ color: '#334155', fontWeight: 600 }}>
-                  Full Name <span style={{ color: '#EF4444' }}>*</span>
-                </label>
-                <input type="text" required placeholder="e.g. Ali Khan" value={name} onChange={(e) => setName(e.target.value)} className="input-field" style={{ borderRadius: '10px', fontSize: '0.9375rem' }}/>
-              </div>)}
-
             {/* Email Field */}
             <div className="input-group" style={{ marginBottom: 0 }}>
               <label className="input-label" style={{ color: '#334155', fontWeight: 600 }}>
@@ -332,7 +275,7 @@ export default function LoginPage() {
                 Password <span style={{ color: '#EF4444' }}>*</span>
               </label>
               <div style={{ position: 'relative' }}>
-                <input type={showPassword ? 'text' : 'password'} required placeholder={mode === 'register' ? 'Choose a secure password' : 'Enter your password'} value={password} onChange={(e) => setPassword(e.target.value)} className="input-field" style={{ paddingRight: '2.5rem', borderRadius: '10px', fontSize: '0.9375rem' }}/>
+                <input type={showPassword ? 'text' : 'password'} required placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} className="input-field" style={{ paddingRight: '2.5rem', borderRadius: '10px', fontSize: '0.9375rem' }}/>
                 <button type="button" onClick={() => setShowPassword(!showPassword)} style={{
             position: 'absolute',
             right: '12px',
@@ -347,11 +290,11 @@ export default function LoginPage() {
                 </button>
               </div>
 
-              {mode === 'signin' && (<div style={{ textAlign: 'right', marginTop: '0.375rem' }}>
-                  <a href="#" style={{ fontSize: '0.8125rem', color: '#06B6D4', fontWeight: 700, textDecoration: 'none' }}>
-                    Forgot password?
-                  </a>
-                </div>)}
+              <div style={{ textAlign: 'right', marginTop: '0.375rem' }}>
+                <a href="#" style={{ fontSize: '0.8125rem', color: '#06B6D4', fontWeight: 700, textDecoration: 'none' }}>
+                  Forgot password?
+                </a>
+              </div>
             </div>
 
             {/* Submit Button */}
@@ -363,31 +306,13 @@ export default function LoginPage() {
             marginTop: '0.5rem',
             cursor: isLoading ? 'not-allowed' : 'pointer',
         }}>
-              {isLoading
-            ? (mode === 'register' ? 'Creating Account...' : 'Signing in...')
-            : (mode === 'register' ? 'Create Account' : 'Sign In')}
+              {isLoading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
 
-          {/* Toggle between Sign In & Register */}
-          <div style={{ marginTop: '1.25rem', textAlign: 'center', fontSize: '0.875rem', color: '#64748B' }}>
-            {mode === 'signin' ? (<span>
-                Don&apos;t have an account?{' '}
-                <button type="button" onClick={() => {
-                setMode('register');
-                setErrorMessage(null);
-            }} style={{ background: 'none', border: 'none', color: '#06B6D4', fontWeight: 700, cursor: 'pointer', padding: 0 }}>
-                  Create one now
-                </button>
-              </span>) : (<span>
-                Already have an account?{' '}
-                <button type="button" onClick={() => {
-                setMode('signin');
-                setErrorMessage(null);
-            }} style={{ background: 'none', border: 'none', color: '#06B6D4', fontWeight: 700, cursor: 'pointer', padding: 0 }}>
-                  Sign in
-                </button>
-              </span>)}
+          {/* Invite-only Notice */}
+          <div style={{ marginTop: '1.25rem', textAlign: 'center', fontSize: '0.8125rem', color: '#64748B', backgroundColor: '#F8FAFC', padding: '0.625rem 0.75rem', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+            🔒 <strong style={{ color: '#0F172A' }}>Invite-Only Access:</strong> Partner accounts are created and managed by the administrator.
           </div>
 
           {/* Divider */}

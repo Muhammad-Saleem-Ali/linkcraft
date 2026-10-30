@@ -52,47 +52,10 @@ export async function login(req, res) {
     }
 }
 export async function register(req, res) {
-    try {
-        const { name, email, password, phone, storeSlug } = req.body;
-        if (!name || !email || !password) {
-            return res.status(400).json({ success: false, error: 'Name, email and password are required' });
-        }
-        // Check if email already exists
-        const existing = await query('SELECT id FROM users WHERE LOWER(email) = LOWER($1)', [email.trim()]);
-        if (existing.rows.length > 0) {
-            return res.status(400).json({ success: false, error: 'An account with this email already exists' });
-        }
-        const passwordHash = await bcrypt.hash(password, 10);
-        const userId = `usr_${Date.now()}`;
-        const slug = storeSlug ? storeSlug.toLowerCase().replace(/[^a-z0-9]/g, '') : name.toLowerCase().replace(/[^a-z0-9]/g, '');
-        const result = await query(`INSERT INTO users (
-        id, name, email, password_hash, phone, role, status, commission_rate,
-        currently_owed, lifetime_earnings, total_paid_out, store_slug
-      ) VALUES ($1, $2, $3, $4, $5, 'partner', 'active', 0.70, 0, 0, 0, $6)
-      RETURNING id, name, email, role, status, commission_rate, currently_owed, lifetime_earnings, total_paid_out, store_slug`, [userId, name, email.trim(), passwordHash, phone || '', slug]);
-        const newUser = result.rows[0];
-        const token = generateToken(newUser);
-        return res.status(201).json({
-            success: true,
-            token,
-            user: {
-                id: newUser.id,
-                name: newUser.name,
-                email: newUser.email,
-                role: newUser.role,
-                status: newUser.status,
-                commissionRate: parseFloat(newUser.commission_rate),
-                currentlyOwed: parseFloat(newUser.currently_owed),
-                lifetimeEarnings: parseFloat(newUser.lifetime_earnings),
-                totalPaidOut: parseFloat(newUser.total_paid_out),
-                storeSlug: newUser.store_slug,
-            },
-        });
-    }
-    catch (err) {
-        console.error('Registration error:', err);
-        return res.status(500).json({ success: false, error: err.message });
-    }
+    return res.status(403).json({
+        success: false,
+        error: 'Public registration is disabled. Partner accounts must be created by a platform administrator.',
+    });
 }
 export async function getMe(req, res) {
     try {

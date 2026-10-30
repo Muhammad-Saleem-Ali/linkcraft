@@ -1,12 +1,15 @@
 'use client';
 import React, { useState } from 'react';
-import { Search, CheckCircle, XCircle, ExternalLink, Edit2, Check, X, CreditCard, Globe, Phone, Mail, Clock } from 'lucide-react';
-export default function AdminUsersTab({ users, onUpdateStatus, onUpdateCommission, showToast, }) {
+import { Search, CheckCircle, XCircle, ExternalLink, Edit2, Check, X, CreditCard, Globe, Phone, Mail, Clock, UserPlus } from 'lucide-react';
+import CreateUserModal from '@/components/CreateUserModal';
+
+export default function AdminUsersTab({ users, onUpdateStatus, onUpdateCommission, onCreateUser, showToast }) {
     const [statusFilter, setStatusFilter] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedUser, setSelectedUser] = useState(null);
     const [editingCommissionId, setEditingCommissionId] = useState(null);
     const [commissionInput, setCommissionInput] = useState(0.70);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const filteredUsers = users.filter((u) => {
         if (statusFilter !== 'all' && u.status !== statusFilter)
             return false;
@@ -61,8 +64,33 @@ export default function AdminUsersTab({ users, onUpdateStatus, onUpdateCommissio
           </p>
         </div>
 
-        {/* Filter Pills Bar */}
-        <div style={{ display: 'flex', gap: '0.375rem', backgroundColor: '#FFFFFF', padding: '0.375rem', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+          {/* Create New User Button */}
+          <button
+            type="button"
+            onClick={() => setIsCreateModalOpen(true)}
+            style={{
+              padding: '0.55rem 1rem',
+              borderRadius: '10px',
+              backgroundColor: '#0F172A',
+              color: '#FFFFFF',
+              border: 'none',
+              fontWeight: 700,
+              fontSize: '0.8125rem',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.375rem',
+              boxShadow: '0 2px 6px rgba(15, 23, 42, 0.15)',
+              transition: 'opacity 0.2s',
+            }}
+          >
+            <UserPlus size={15} />
+            <span>Create New User</span>
+          </button>
+
+          {/* Filter Pills Bar */}
+          <div style={{ display: 'flex', gap: '0.375rem', backgroundColor: '#FFFFFF', padding: '0.375rem', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
           {['all', 'active', 'pending', 'suspended'].map((st) => {
             const isActive = statusFilter === st;
             const count = st === 'all' ? users.length : users.filter((u) => u.status === st).length;
@@ -93,6 +121,7 @@ export default function AdminUsersTab({ users, onUpdateStatus, onUpdateCommissio
                 </span>
               </button>);
         })}
+        </div>
         </div>
       </div>
 
@@ -519,6 +548,16 @@ export default function AdminUsersTab({ users, onUpdateStatus, onUpdateCommissio
             </button>
           </div>
         </div>
+      )}
+
+      {/* Create New User Modal */}
+      {isCreateModalOpen && (
+        <CreateUserModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          onCreateUser={onCreateUser}
+          showToast={showToast}
+        />
       )}
     </div>);
 }
